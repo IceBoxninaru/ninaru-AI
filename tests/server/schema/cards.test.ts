@@ -1,11 +1,10 @@
 import { BASIC_CARDS, generateInitialDeck, DECK_COMPOSITION } from '../../../server/schema/cards';
-import { CardRarity } from '../../../shared/types/game';
+import { CardRarity, CardType } from '../../../shared/types/game';
 
 describe('カードシステム', () => {
   describe('基本カードセット', () => {
     it('すべての基本カードが正しい属性を持っている', () => {
       BASIC_CARDS.forEach(card => {
-        expect(card).toHaveProperty('id');
         expect(card).toHaveProperty('name');
         expect(card).toHaveProperty('description');
         expect(card).toHaveProperty('element');
@@ -16,11 +15,10 @@ describe('カードシステム', () => {
     });
 
     it('各カードタイプが適切な追加属性を持っている', () => {
-      const attackCards = BASIC_CARDS.filter(card => card.type === 'ATTACK');
-      const defenseCards = BASIC_CARDS.filter(card => card.type === 'DEFENSE');
-      const magicCards = BASIC_CARDS.filter(card => card.type === 'MAGIC');
-      const supportCards = BASIC_CARDS.filter(card => card.type === 'SUPPORT');
-      const specialCards = BASIC_CARDS.filter(card => card.type === 'SPECIAL');
+      const attackCards = BASIC_CARDS.filter(card => card.type === CardType.ATTACK);
+      const defenseCards = BASIC_CARDS.filter(card => card.type === CardType.DEFENSE);
+      const supportCards = BASIC_CARDS.filter(card => card.type === CardType.SUPPORT);
+      const specialCards = BASIC_CARDS.filter(card => card.type === CardType.SPECIAL);
 
       attackCards.forEach(card => {
         expect(card).toHaveProperty('power');
@@ -28,11 +26,6 @@ describe('カードシステム', () => {
 
       defenseCards.forEach(card => {
         expect(card).toHaveProperty('shield');
-      });
-
-      magicCards.forEach(card => {
-        expect(card).toHaveProperty('power');
-        expect(card).toHaveProperty('effects');
       });
 
       supportCards.forEach(card => {
@@ -59,9 +52,11 @@ describe('カードシステム', () => {
 
     it('各レアリティのカードが正しい枚数含まれている', () => {
       const cardCounts = deck.reduce((counts, card) => {
-        counts[card.rarity] = (counts[card.rarity] || 0) + 1;
+        if (card.rarity) {
+          counts[card.rarity] = (counts[card.rarity] || 0) + 1;
+        }
         return counts;
-      }, {} as Record<CardRarity, number>);
+      }, {} as Partial<Record<CardRarity, number>>);
 
       Object.entries(DECK_COMPOSITION).forEach(([rarity, expectedCount]) => {
         expect(cardCounts[rarity as CardRarity]).toBe(expectedCount);

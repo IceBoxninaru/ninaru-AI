@@ -10,7 +10,7 @@ import {
   GamePhase,
   IWeather
 } from '../../shared/types/game';
-import { WEATHER_CONFIG } from '../schema/weather';
+import { WEATHER_CONFIG, STATUS_EFFECT_CONFIG } from '../schema/weather';
 import { v4 as uuidv4 } from 'uuid';
 import { Player } from './player';
 
@@ -34,13 +34,13 @@ export class Game {
       currentPlayerId: '',
       players: [],
       weather: this.generateInitialWeather(),
-      phase: 'WAIT',
+      phase: GamePhase.WAIT,
       turn: 1
     };
   }
 
   private generateInitialWeather(): IWeather {
-    const weatherTypes = Object.keys(WEATHER_CONFIG) as WeatherKind[];
+    const weatherTypes = Object.values(WeatherKind);
     const randomWeather = weatherTypes[Math.floor(Math.random() * weatherTypes.length)];
     return {
       type: randomWeather,
@@ -65,7 +65,7 @@ export class Game {
   }
 
   private startGame(): void {
-    this.state.phase = 'DRAW';
+    this.state.phase = GamePhase.DRAW;
     this.state.players.forEach(player => {
       if (player instanceof Player) {
         player.drawCard();
@@ -231,5 +231,62 @@ export class Game {
       this.state.winner = alivePlayers[0]?.id;
       this.broadcastGameState();
     }
+  }
+
+  public setWeather(weather: IWeather): void {
+    this.state.weather = weather;
+    this.broadcastGameState();
+  }
+
+  public getCurrentPlayer(): IPlayer {
+    return this.state.players[this.currentPlayerIndex];
+  }
+
+  public getPlayers(): IPlayer[] {
+    return this.state.players;
+  }
+
+  public calculateDamage(power: number, attacker: IPlayer, defender: IPlayer, element: ElementKind): number {
+    let damage = power;
+
+    // 天候による効果の修正
+    const weatherConfig = WEATHER_CONFIG[this.state.weather.type];
+    if (weatherConfig) {
+      if (weatherConfig.bonus[element]) damage *= 1.5;
+      if (weatherConfig.penalty[element]) damage *= 0.5;
+    }
+
+    // 攻撃者の攻撃力補正
+    damage *= attacker.damageMultiplier;
+
+    // 防御者の防御力補正
+    damage *= defender.damageReceivedMultiplier;
+
+    // クリティカルヒット
+    if (attacker.combo >= attacker.maxCombo) {
+      damage *= 2;
+    }
+
+    return Math.floor(damage);
+  }
+
+  public applyStatusEffect(playerId: string, effect: StatusEffectType): void {
+    const player = this.state.players.find(p => p.id === playerId);
+    if (!player) return;
+
+    const duration = STATUS_EFFECT_CONFIG[effect]?.duration || 2;
+    player.addStatus(effect, duration);
+    this.broadcastGameState();
+  }
+
+  public checkGameOver(): boolean {
+    const alivePlayers = this.state.players.filter(p => p.hp > 0);
+    return alivePlayers.length <= 1;
+  }
+
+  public getWinner(): string | undefined {
+    if (!this.checkGameOver()) return undefined;
+    const winner = this.state.players.find(p => p.hp > 0);
+    return winner?.id;
   }
 } 

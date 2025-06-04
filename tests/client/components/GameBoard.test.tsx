@@ -2,15 +2,27 @@ import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { GameBoard } from '../../../client/src/components/GameBoard';
-import { IGameState, IPlayer, ICardData, IWeather, IStatusEffect, StatusEffectType } from '../../../shared/types/game';
+import {
+  IGameState,
+  IPlayer,
+  ICardData,
+  IWeather,
+  IStatusEffect,
+  StatusEffectType,
+  ElementKind,
+  CardType,
+  CardRarity,
+  WeatherKind,
+  GamePhase
+} from '../../../shared/types/game';
 
 const mockCard: ICardData = {
   id: 'card1',
   name: 'テストカード',
   description: 'テスト用のカード',
-  element: 'FIRE',
-  type: 'ATTACK',
-  rarity: 'COMMON',
+  element: ElementKind.FIRE,
+  type: CardType.ATTACK,
+  rarity: CardRarity.COMMON,
   mpCost: 10,
   power: 20
 };
@@ -19,34 +31,82 @@ const mockPlayer1: IPlayer = {
   id: 'player1',
   name: 'プレイヤー1',
   hp: 100,
+  maxHp: 100,
   mp: 50,
+  maxMp: 50,
   faith: 0,
+  combo: 0,
+  maxCombo: 3,
+  gold: 0,
   hand: [mockCard],
   deck: [],
-  statusEffects: []
+  discardPile: [],
+  status: new Map(),
+  damageMultiplier: 1,
+  mpCostMultiplier: 1,
+  damageReceivedMultiplier: 1,
+  statusEffects: [],
+  drawCard: jest.fn(),
+  addStatus: jest.fn(),
+  removeStatus: jest.fn(),
+  updateStatuses: jest.fn(),
+  takeDamage: jest.fn(),
+  heal: jest.fn(),
+  spendMp: jest.fn(),
+  gainMp: jest.fn(),
+  spendFaith: jest.fn(),
+  addFaith: jest.fn(),
+  addCombo: jest.fn(),
+  resetCombo: jest.fn()
 };
 
 const mockPlayer2: IPlayer = {
   id: 'player2',
   name: 'プレイヤー2',
   hp: 100,
+  maxHp: 100,
   mp: 50,
+  maxMp: 50,
   faith: 0,
+  combo: 0,
+  maxCombo: 3,
+  gold: 0,
   hand: [],
   deck: [],
-  statusEffects: []
+  discardPile: [],
+  status: new Map(),
+  damageMultiplier: 1,
+  mpCostMultiplier: 1,
+  damageReceivedMultiplier: 1,
+  statusEffects: [],
+  drawCard: jest.fn(),
+  addStatus: jest.fn(),
+  removeStatus: jest.fn(),
+  updateStatuses: jest.fn(),
+  takeDamage: jest.fn(),
+  heal: jest.fn(),
+  spendMp: jest.fn(),
+  gainMp: jest.fn(),
+  spendFaith: jest.fn(),
+  addFaith: jest.fn(),
+  addCombo: jest.fn(),
+  resetCombo: jest.fn()
 };
 
 const mockWeather: IWeather = {
-  type: 'SUNNY',
+  type: WeatherKind.SUNNY,
+  duration: 3,
   turnsLeft: 3
 };
 
 const mockGameState: IGameState = {
+  id: 'game1',
   currentTurn: 1,
   currentPlayerId: 'player1',
   players: [mockPlayer1, mockPlayer2],
-  weather: mockWeather
+  weather: mockWeather,
+  phase: GamePhase.MAIN,
+  turn: 1
 };
 
 describe('GameBoard', () => {
@@ -70,7 +130,7 @@ describe('GameBoard', () => {
     expect(screen.getByText('プレイヤー1')).toBeInTheDocument();
     expect(screen.getByText('プレイヤー2')).toBeInTheDocument();
     expect(screen.getByText('テストカード')).toBeInTheDocument();
-    expect(screen.getByText(/天候: SUNNY/)).toBeInTheDocument();
+    expect(screen.getByText(`天候: ${WeatherKind.SUNNY}`)).toBeInTheDocument();
     expect(screen.getByText(/ターン: 1/)).toBeInTheDocument();
   });
 
@@ -137,7 +197,11 @@ describe('GameBoard', () => {
 
   it('状態異常が正しく表示される', () => {
     const mockStatusEffect: IStatusEffect = {
-      type: 'BURN' as StatusEffectType,
+      type: StatusEffectType.BURN,
+      name: '火傷',
+      duration: 3,
+      description: 'ターン開始時にHPが減少します',
+      value: 5,
       turnsLeft: 2
     };
 
@@ -161,7 +225,7 @@ describe('GameBoard', () => {
       />
     );
 
-    expect(screen.getByText('BURN(2)')).toBeInTheDocument();
+    expect(screen.getByText('火傷(2)')).toBeInTheDocument();
   });
 
   it('ターン終了ボタンが正しく機能する', () => {

@@ -87,4 +87,8 @@ ISC License
 2. 新しいブランチを作成 (`git checkout -b feature/amazing-feature`)
 3. 変更をコミット (`git commit -m 'Add some amazing feature'`)
 4. ブランチにプッシュ (`git push origin feature/amazing-feature`)
+<<<<<<< HEAD
 5. プルリクエストを作成 
+=======
+5. プルリクエストを作成 
+>>>>>>> c9a240bb019082701d79d86472e5d659e2a4bac5

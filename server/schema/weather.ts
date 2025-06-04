@@ -14,223 +14,244 @@ interface StatusEffectConfig {
   name: string;
   description: string;
   icon: string;
+  duration: number;
 }
 
 export const WEATHER_CONFIG: Record<WeatherKind, WeatherConfig> = {
-  SUNNY: {
+  [WeatherKind.SUNNY]: {
     name: '晴天',
     description: '火属性と光属性の威力が上昇し、水属性と闇属性の威力が低下する',
     duration: 3,
     bonus: {
-      FIRE: true,
-      LIGHT: true
+      [ElementKind.FIRE]: true,
+      [ElementKind.LIGHT]: true
     },
     penalty: {
-      WATER: true,
-      DARK: true
+      [ElementKind.WATER]: true,
+      [ElementKind.DARK]: true
     }
   },
-  RAINY: {
+  [WeatherKind.RAINY]: {
     name: '雨天',
     description: '水属性と地属性の威力が上昇し、火属性と風属性の威力が低下する',
     duration: 3,
-    effect: 'FREEZE',
+    effect: StatusEffectType.FREEZE,
     effectChance: 0.2,
     bonus: {
-      WATER: true,
-      EARTH: true
+      [ElementKind.WATER]: true,
+      [ElementKind.EARTH]: true
     },
     penalty: {
-      FIRE: true,
-      WIND: true
+      [ElementKind.FIRE]: true,
+      [ElementKind.WIND]: true
     }
   },
-  STORMY: {
+  [WeatherKind.STORMY]: {
     name: '嵐',
     description: '風属性と闇属性の威力が上昇し、地属性と光属性の威力が低下する',
     duration: 4,
-    effect: 'STUN',
+    effect: StatusEffectType.STUN,
     effectChance: 0.15,
     bonus: {
-      WIND: true,
-      DARK: true
+      [ElementKind.WIND]: true,
+      [ElementKind.DARK]: true
     },
     penalty: {
-      EARTH: true,
-      LIGHT: true
+      [ElementKind.EARTH]: true,
+      [ElementKind.LIGHT]: true
     }
   },
-  SNOWY: {
+  [WeatherKind.SNOWY]: {
     name: '雪',
     description: '水属性と地属性が強化され、火属性と風属性が弱体化します。',
     duration: 2,
-    effect: 'FREEZE',
+    effect: StatusEffectType.FREEZE,
     effectChance: 0.3,
     bonus: {
-      FIRE: false,
-      WATER: true,
-      EARTH: true,
-      WIND: false,
-      LIGHT: false,
-      DARK: false,
-      NEUTRAL: false
+      [ElementKind.WATER]: true,
+      [ElementKind.EARTH]: true
     },
     penalty: {
-      FIRE: true,
-      WATER: false,
-      EARTH: false,
-      WIND: true,
-      LIGHT: false,
-      DARK: false,
-      NEUTRAL: false
+      [ElementKind.FIRE]: true,
+      [ElementKind.WIND]: true
     }
   },
-  FOGGY: {
+  [WeatherKind.CLOUDY]: {
+    name: '曇り',
+    description: '全ての属性の威力が若干低下します。',
+    duration: 2,
+    bonus: {
+      [ElementKind.FIRE]: false,
+      [ElementKind.WATER]: false,
+      [ElementKind.EARTH]: false,
+      [ElementKind.WIND]: false,
+      [ElementKind.LIGHT]: false,
+      [ElementKind.DARK]: false,
+      [ElementKind.NEUTRAL]: false
+    },
+    penalty: {
+      [ElementKind.FIRE]: true,
+      [ElementKind.WATER]: true,
+      [ElementKind.EARTH]: true,
+      [ElementKind.WIND]: true,
+      [ElementKind.LIGHT]: true,
+      [ElementKind.DARK]: true,
+      [ElementKind.NEUTRAL]: true
+    }
+  },
+  [WeatherKind.FOGGY]: {
     name: '霧',
     description: '闇属性が強化され、光属性が弱体化します。',
     duration: 2,
-    effect: 'POISON',
+    effect: StatusEffectType.POISON,
     effectChance: 0.2,
     bonus: {
-      FIRE: false,
-      WATER: false,
-      EARTH: false,
-      WIND: false,
-      LIGHT: false,
-      DARK: true,
-      NEUTRAL: false
+      [ElementKind.FIRE]: false,
+      [ElementKind.WATER]: false,
+      [ElementKind.EARTH]: false,
+      [ElementKind.WIND]: false,
+      [ElementKind.LIGHT]: false,
+      [ElementKind.DARK]: true,
+      [ElementKind.NEUTRAL]: false
     },
     penalty: {
-      FIRE: false,
-      WATER: false,
-      EARTH: false,
-      WIND: false,
-      LIGHT: true,
-      DARK: false,
-      NEUTRAL: false
+      [ElementKind.FIRE]: false,
+      [ElementKind.WATER]: false,
+      [ElementKind.EARTH]: false,
+      [ElementKind.WIND]: false,
+      [ElementKind.LIGHT]: true,
+      [ElementKind.DARK]: false,
+      [ElementKind.NEUTRAL]: false
     }
   },
-  SACRED: {
+  [WeatherKind.SACRED]: {
     name: '神聖',
     description: '光属性が強化され、闇属性が弱体化します。',
     duration: 2,
-    effect: 'REGENERATION',
+    effect: StatusEffectType.REGENERATION,
     effectChance: 0.25,
     bonus: {
-      FIRE: false,
-      WATER: false,
-      EARTH: false,
-      WIND: false,
-      LIGHT: true,
-      DARK: false,
-      NEUTRAL: false
+      [ElementKind.FIRE]: false,
+      [ElementKind.WATER]: false,
+      [ElementKind.EARTH]: false,
+      [ElementKind.WIND]: false,
+      [ElementKind.LIGHT]: true,
+      [ElementKind.DARK]: false,
+      [ElementKind.NEUTRAL]: false
     },
     penalty: {
-      FIRE: false,
-      WATER: false,
-      EARTH: false,
-      WIND: false,
-      LIGHT: false,
-      DARK: true,
-      NEUTRAL: false
+      [ElementKind.FIRE]: false,
+      [ElementKind.WATER]: false,
+      [ElementKind.EARTH]: false,
+      [ElementKind.WIND]: false,
+      [ElementKind.LIGHT]: false,
+      [ElementKind.DARK]: true,
+      [ElementKind.NEUTRAL]: false
     }
   },
-  CLEAR: {
+  [WeatherKind.CLEAR]: {
     name: '快晴',
     description: '特に効果はありません。',
     duration: 3,
     bonus: {
-      FIRE: false,
-      WATER: false,
-      EARTH: false,
-      WIND: false,
-      LIGHT: false,
-      DARK: false,
-      NEUTRAL: false
+      [ElementKind.FIRE]: false,
+      [ElementKind.WATER]: false,
+      [ElementKind.EARTH]: false,
+      [ElementKind.WIND]: false,
+      [ElementKind.LIGHT]: false,
+      [ElementKind.DARK]: false,
+      [ElementKind.NEUTRAL]: false
     },
     penalty: {
-      FIRE: false,
-      WATER: false,
-      EARTH: false,
-      WIND: false,
-      LIGHT: false,
-      DARK: false,
-      NEUTRAL: false
+      [ElementKind.FIRE]: false,
+      [ElementKind.WATER]: false,
+      [ElementKind.EARTH]: false,
+      [ElementKind.WIND]: false,
+      [ElementKind.LIGHT]: false,
+      [ElementKind.DARK]: false,
+      [ElementKind.NEUTRAL]: false
     }
   },
-  WINDY: {
+  [WeatherKind.WINDY]: {
     name: '強風',
     description: '風属性と無属性の威力が上昇し、地属性の威力が低下する',
     duration: 3,
-    effect: 'STUN',
+    effect: StatusEffectType.STUN,
     effectChance: 0.1,
     bonus: {
-      WIND: true,
-      NEUTRAL: true
+      [ElementKind.WIND]: true,
+      [ElementKind.NEUTRAL]: true
     },
     penalty: {
-      EARTH: true
+      [ElementKind.EARTH]: true
     }
   }
 };
 
 export const STATUS_EFFECT_CONFIG: Record<StatusEffectType, StatusEffectConfig> = {
-  BURN: {
+  [StatusEffectType.BURN]: {
     name: '火傷',
     description: 'ターン開始時にHPが減少します',
-    icon: '🔥'
+    icon: '🔥',
+    duration: 3
   },
-  FREEZE: {
+  [StatusEffectType.FREEZE]: {
     name: '凍結',
     description: 'MPの回復量が減少します',
-    icon: '❄️'
+    icon: '❄️',
+    duration: 2
   },
-  POISON: {
+  [StatusEffectType.POISON]: {
     name: '毒',
     description: 'ターン終了時にHPが減少します',
-    icon: '☠️'
+    icon: '☠️',
+    duration: 4
   },
-  STUN: {
+  [StatusEffectType.STUN]: {
     name: '麻痺',
     description: 'カードを使用できない確率があります',
-    icon: '⚡'
+    icon: '⚡',
+    duration: 1
   },
-  SHIELD: {
+  [StatusEffectType.SHIELD]: {
     name: '防御',
     description: '受けるダメージが減少します',
-    icon: '🛡️'
+    icon: '🛡️',
+    duration: 2
   },
-  REGEN: {
+  [StatusEffectType.REGENERATION]: {
     name: '再生',
     description: 'ターン開始時にHPが回復します',
-    icon: '💚'
+    icon: '💚',
+    duration: 3
   },
-  REGENERATION: {
-    name: '再生',
+  [StatusEffectType.REGEN]: {
+    name: '回復',
     description: 'ターン開始時にHPが回復します',
-    icon: '💚'
+    icon: '💖',
+    duration: 2
   },
-  CURSE: {
+  [StatusEffectType.CURSE]: {
     name: '呪い',
     description: '与えるダメージが減少します',
     icon: '👻'
   },
-  BLESS: {
+  [StatusEffectType.BLESS]: {
     name: '祝福',
     description: '回復効果が増加します',
     icon: '✨'
   },
-  RAGE: {
+  [StatusEffectType.RAGE]: {
     name: '激怒',
     description: '与えるダメージが増加します',
     icon: '😠'
   },
-  PURIFY: {
+  [StatusEffectType.PURIFY]: {
     name: '浄化',
     description: '回復効果が減少します',
     icon: '✝️'
   },
-  PARALYZE: {
+  [StatusEffectType.PARALYZE]: {
     name: '麻痺',
     description: '行動が制限されます',
     icon: '⚡'

@@ -20,9 +20,9 @@ const CARD_TEMPLATES: CardTemplate[] = [
   {
     name: '炎の剣',
     description: '炎の力を纏った一撃を放つ',
-    type: 'ATTACK',
-    element: 'FIRE',
-    rarity: 'COMMON',
+    type: CardType.ATTACK,
+    element: ElementKind.FIRE,
+    rarity: CardRarity.COMMON,
     mpCost: 2,
     power: 15,
     comboValue: 1
@@ -30,28 +30,28 @@ const CARD_TEMPLATES: CardTemplate[] = [
   {
     name: '水流弾',
     description: '高圧の水弾を放つ',
-    type: 'ATTACK',
-    element: 'WATER',
-    rarity: 'COMMON',
+    type: CardType.ATTACK,
+    element: ElementKind.WATER,
+    rarity: CardRarity.COMMON,
     mpCost: 2,
     power: 12,
-    effects: ['FREEZE']
+    effects: [StatusEffectType.FREEZE]
   },
   {
     name: '大地の槌',
     description: '大地の力を込めた一撃',
-    type: 'ATTACK',
-    element: 'EARTH',
-    rarity: 'COMMON',
+    type: CardType.ATTACK,
+    element: ElementKind.EARTH,
+    rarity: CardRarity.COMMON,
     mpCost: 3,
     power: 18
   },
   {
     name: '風刃',
     description: '鋭い風の刃を放つ',
-    type: 'ATTACK',
-    element: 'WIND',
-    rarity: 'COMMON',
+    type: CardType.ATTACK,
+    element: ElementKind.WIND,
+    rarity: CardRarity.COMMON,
     mpCost: 1,
     power: 8,
     comboValue: 2
@@ -60,53 +60,55 @@ const CARD_TEMPLATES: CardTemplate[] = [
   {
     name: '光の盾',
     description: '光の力で身を守る',
-    type: 'DEFENSE',
-    element: 'LIGHT',
-    rarity: 'COMMON',
+    type: CardType.DEFENSE,
+    element: ElementKind.LIGHT,
+    rarity: CardRarity.COMMON,
     mpCost: 2,
     shield: 15,
-    effects: ['SHIELD']
+    effects: [StatusEffectType.SHIELD]
   },
   {
     name: '闇の霧',
     description: '闇の力で攻撃を回避する',
-    type: 'DEFENSE',
-    element: 'DARK',
-    rarity: 'COMMON',
+    type: CardType.DEFENSE,
+    element: ElementKind.DARK,
+    rarity: CardRarity.COMMON,
     mpCost: 2,
     shield: 10,
-    effects: ['SHIELD', 'POISON']
+    effects: [StatusEffectType.SHIELD, StatusEffectType.POISON]
   },
   // サポートカード
   {
     name: '癒しの光',
     description: 'HPを回復する',
-    type: 'SUPPORT',
-    element: 'LIGHT',
-    rarity: 'UNCOMMON',
+    type: CardType.SUPPORT,
+    element: ElementKind.LIGHT,
+    rarity: CardRarity.UNCOMMON,
     mpCost: 3,
     faithCost: 1,
-    effects: ['REGENERATION']
+    effects: [StatusEffectType.REGENERATION]
   },
   {
     name: '加護の祈り',
     description: '信仰の力で味方を強化する',
-    type: 'SUPPORT',
-    element: 'NEUTRAL',
-    rarity: 'RARE',
+    type: CardType.SUPPORT,
+    element: ElementKind.NEUTRAL,
+    rarity: CardRarity.RARE,
     mpCost: 4,
     faithCost: 2,
-    effects: ['SHIELD', 'REGENERATION']
+    effects: [StatusEffectType.SHIELD, StatusEffectType.REGENERATION]
   }
 ];
 
 // レアリティごとのカード枚数
 export const DECK_COMPOSITION = {
-  COMMON: 15,
-  UNCOMMON: 10,
-  RARE: 4,
-  LEGENDARY: 1
+  [CardRarity.COMMON]: 15,
+  [CardRarity.UNCOMMON]: 10,
+  [CardRarity.RARE]: 4,
+  [CardRarity.LEGENDARY]: 1
 };
+
+export const BASIC_CARDS = CARD_TEMPLATES;
 
 // 初期デッキ生成関数
 export function generateInitialDeck(): ICardData[] {

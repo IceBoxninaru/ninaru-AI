@@ -4,7 +4,10 @@ export enum WeatherKind {
   CLOUDY = 'CLOUDY',
   STORMY = 'STORMY',
   WINDY = 'WINDY',
-  SNOWY = 'SNOWY'
+  SNOWY = 'SNOWY',
+  FOGGY = 'FOGGY',
+  SACRED = 'SACRED',
+  CLEAR = 'CLEAR'
 }
 
 export enum ElementKind {
@@ -46,7 +49,12 @@ export enum StatusEffectType {
   BURN = 'BURN',
   FREEZE = 'FREEZE',
   STUN = 'STUN',
-  REGEN = 'REGEN'
+  REGEN = 'REGEN',
+  CURSE = 'CURSE',
+  BLESS = 'BLESS',
+  RAGE = 'RAGE',
+  PURIFY = 'PURIFY',
+  PARALYZE = 'PARALYZE'
 }
 
 export const ELEMENTS = Object.values(ElementKind);
@@ -68,8 +76,8 @@ export interface ICardData {
   type: CardType;
   element: ElementKind;
   mpCost: number;
-  faithCost: number;
-  comboValue: number;
+  faithCost?: number;
+  comboValue?: number;
   description: string;
   power?: number;
   shield?: number;

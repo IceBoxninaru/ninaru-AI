@@ -1,5 +1,5 @@
 import { WEATHER_CONFIG, STATUS_EFFECT_CONFIG } from '../../../server/schema/weather';
-import { WeatherKind, ElementKind } from '../../../shared/types/game';
+import { WeatherKind, ElementKind, StatusEffectType } from '../../../shared/types/game';
 
 describe('天候システム', () => {
   describe('天候設定', () => {
@@ -16,7 +16,7 @@ describe('天候システム', () => {
     it('各天候のボーナスとペナルティが正しく設定されている', () => {
       Object.values(WEATHER_CONFIG).forEach(weather => {
         // すべての属性が含まれているか確認
-        const elements: ElementKind[] = ['FIRE', 'WATER', 'EARTH', 'WIND', 'LIGHT', 'DARK', 'NEUTRAL'];
+        const elements = Object.values(ElementKind);
         elements.forEach(element => {
           expect(weather.bonus).toHaveProperty(element);
           expect(weather.penalty).toHaveProperty(element);
@@ -54,6 +54,7 @@ describe('天候システム', () => {
         expect(effect).toHaveProperty('name');
         expect(effect).toHaveProperty('description');
         expect(effect).toHaveProperty('icon');
+        expect(effect).toHaveProperty('duration');
       });
     });
 
@@ -68,18 +69,18 @@ describe('天候システム', () => {
   describe('天候の相互作用', () => {
     it('対立する天候効果が存在する', () => {
       const weatherPairs = [
-        ['SUNNY', 'RAINY'],
-        ['SACRED', 'FOGGY']
+        [WeatherKind.SUNNY, WeatherKind.RAINY],
+        [WeatherKind.CLOUDY, WeatherKind.WINDY]
       ];
 
       weatherPairs.forEach(([weather1, weather2]) => {
-        const config1 = WEATHER_CONFIG[weather1 as WeatherKind];
-        const config2 = WEATHER_CONFIG[weather2 as WeatherKind];
+        const config1 = WEATHER_CONFIG[weather1];
+        const config2 = WEATHER_CONFIG[weather2];
 
         // 対立する天候は逆の効果を持つはず
-        Object.keys(config1.bonus).forEach(element => {
-          if (config1.bonus[element as ElementKind]) {
-            expect(config2.penalty[element as ElementKind]).toBe(true);
+        Object.values(ElementKind).forEach(element => {
+          if (config1.bonus[element]) {
+            expect(config2.penalty[element]).toBe(true);
           }
         });
       });
