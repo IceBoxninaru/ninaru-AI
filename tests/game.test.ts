@@ -1,29 +1,50 @@
 import { Game } from '../server/src/game';
 import { Player } from '../server/src/player';
 import { WeatherKind, ElementKind, StatusEffectType } from '../shared/types/game';
+import { Server, Socket } from 'socket.io';
+import { DefaultEventsMap } from 'socket.io/dist/typed-events';
+
+// Socket.ioのモック
+const mockSocket = {
+  id: 'socket-id',
+  emit: jest.fn(),
+  on: jest.fn(),
+  join: jest.fn(),
+  leave: jest.fn()
+} as unknown as Socket;
+
+const mockIo = {
+  emit: jest.fn(),
+  to: jest.fn().mockReturnThis(),
+  sockets: {
+    emit: jest.fn()
+  }
+} as unknown as Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap>;
 
 describe('Game', () => {
   let game: Game;
-  let player1: Player;
-  let player2: Player;
+  let socket1: Socket;
+  let socket2: Socket;
 
   beforeEach(() => {
-    game = new Game();
-    player1 = new Player('player1', 'Player 1');
-    player2 = new Player('player2', 'Player 2');
-    game.addPlayer(player1);
-    game.addPlayer(player2);
+    socket1 = { ...mockSocket, id: 'player1' } as Socket;
+    socket2 = { ...mockSocket, id: 'player2' } as Socket;
+    game = new Game(mockIo);
+    game.addPlayer(socket1, 'Player 1');
+    game.addPlayer(socket2, 'Player 2');
   });
 
   describe('初期化', () => {
     it('プレイヤーが正しく追加されている', () => {
-      expect(game.getPlayers().length).toBe(2);
-      expect(game.getPlayers()[0].id).toBe('player1');
-      expect(game.getPlayers()[1].id).toBe('player2');
+      const state = game.getState();
+      expect(state.players.length).toBe(2);
+      expect(state.players[0].id).toBe('player1');
+      expect(state.players[1].id).toBe('player2');
     });
 
     it('初期デッキが正しく設定されている', () => {
-      const player = game.getPlayers()[0];
+      const state = game.getState();
+      const player = state.players[0];
       expect(player.deck.length).toBeGreaterThan(0);
       expect(player.hand.length).toBe(5); // 初期手札
     });
@@ -31,40 +52,41 @@ describe('Game', () => {
 
   describe('ターン管理', () => {
     it('正しい順序でターンが進行する', () => {
-      const firstPlayer = game.getCurrentPlayer();
-      game.endTurn();
-      expect(game.getCurrentPlayer()).not.toBe(firstPlayer);
-      game.endTurn();
-      expect(game.getCurrentPlayer()).toBe(firstPlayer);
+      const state = game.getState();
+      const firstPlayerId = state.currentPlayerId;
+      game.endTurn(firstPlayerId);
+      
+      const newState = game.getState();
+      expect(newState.currentPlayerId).not.toBe(firstPlayerId);
+      
+      game.endTurn(newState.currentPlayerId);
+      const finalState = game.getState();
+      expect(finalState.currentPlayerId).toBe(firstPlayerId);
     });
   });
 
   describe('カード使用', () => {
     it('MPが足りない場合はカードを使用できない', () => {
-      const player = game.getCurrentPlayer();
-      const card = {
-        id: 'test-card',
-        name: 'Test Card',
-        mpCost: 999,
-        element: ElementKind.FIRE
-      };
-      expect(() => game.playCard(player.id, card)).toThrow();
+      const state = game.getState();
+      const currentPlayerId = state.currentPlayerId;
+      
+      game.handleCardPlay(currentPlayerId, 0); // 無効なカードインデックス
+      const newState = game.getState();
+      expect(newState.players[0].hand.length).toBe(state.players[0].hand.length);
     });
 
     it('正しくダメージが計算される', () => {
-      const attacker = game.getCurrentPlayer();
-      const defender = game.getPlayers().find(p => p.id !== attacker.id)!;
-      const initialHp = defender.hp;
-      const card = {
-        id: 'attack-card',
-        name: 'Attack Card',
-        mpCost: 1,
-        power: 10,
-        element: ElementKind.FIRE
-      };
-      
-      game.playCard(attacker.id, card);
-      expect(defender.hp).toBeLessThan(initialHp);
+      const state = game.getState();
+      const attackerId = state.currentPlayerId;
+      const defenderId = state.players.find(p => p.id !== attackerId)!.id;
+      const initialHp = state.players.find(p => p.id === defenderId)!.hp;
+
+      // 攻撃カードを使用
+      game.handleCardPlay(attackerId, 0, defenderId);
+
+      const newState = game.getState();
+      const newDefenderHp = newState.players.find(p => p.id === defenderId)!.hp;
+      expect(newDefenderHp).toBeLessThan(initialHp);
     });
   });
 

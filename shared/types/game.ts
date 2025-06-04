@@ -1,34 +1,79 @@
-export type WeatherKind = 'SUNNY' | 'RAINY' | 'CLOUDY' | 'STORMY' | 'WINDY';
-export type ElementKind = 'FIRE' | 'WATER' | 'EARTH' | 'WIND' | 'LIGHT' | 'DARK' | 'NEUTRAL';
-export type CardType = 'ATTACK' | 'DEFENSE' | 'SUPPORT' | 'SPECIAL';
-export type CardRarity = 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
-export type GamePhase = 'WAIT' | 'DRAW' | 'MAIN' | 'END';
-export type StatusEffectType = 'SHIELD' | 'REGENERATION' | 'POISON' | 'BURN' | 'FREEZE' | 'STUN';
+export enum WeatherKind {
+  SUNNY = 'SUNNY',
+  RAINY = 'RAINY',
+  CLOUDY = 'CLOUDY',
+  STORMY = 'STORMY',
+  WINDY = 'WINDY',
+  SNOWY = 'SNOWY'
+}
 
-export const ELEMENTS: ElementKind[] = ['FIRE', 'WATER', 'EARTH', 'WIND', 'LIGHT', 'DARK', 'NEUTRAL'];
-export const CARD_TYPES: CardType[] = ['ATTACK', 'DEFENSE', 'SUPPORT', 'SPECIAL'];
-export const CARD_RARITIES: CardRarity[] = ['COMMON', 'UNCOMMON', 'RARE', 'EPIC', 'LEGENDARY'];
-export const STATUS_EFFECTS: StatusEffectType[] = ['SHIELD', 'REGENERATION', 'POISON', 'BURN', 'FREEZE', 'STUN'];
-export const WEATHER_TYPES: WeatherKind[] = ['SUNNY', 'RAINY', 'CLOUDY', 'STORMY', 'WINDY'];
-export const GAME_PHASES: GamePhase[] = ['WAIT', 'DRAW', 'MAIN', 'END'];
+export enum ElementKind {
+  FIRE = 'FIRE',
+  WATER = 'WATER',
+  EARTH = 'EARTH',
+  WIND = 'WIND',
+  LIGHT = 'LIGHT',
+  DARK = 'DARK',
+  NEUTRAL = 'NEUTRAL'
+}
+
+export enum CardType {
+  ATTACK = 'ATTACK',
+  DEFENSE = 'DEFENSE',
+  SUPPORT = 'SUPPORT',
+  SPECIAL = 'SPECIAL'
+}
+
+export enum CardRarity {
+  COMMON = 'COMMON',
+  UNCOMMON = 'UNCOMMON',
+  RARE = 'RARE',
+  EPIC = 'EPIC',
+  LEGENDARY = 'LEGENDARY'
+}
+
+export enum GamePhase {
+  WAIT = 'WAIT',
+  DRAW = 'DRAW',
+  MAIN = 'MAIN',
+  END = 'END'
+}
+
+export enum StatusEffectType {
+  SHIELD = 'SHIELD',
+  REGENERATION = 'REGENERATION',
+  POISON = 'POISON',
+  BURN = 'BURN',
+  FREEZE = 'FREEZE',
+  STUN = 'STUN',
+  REGEN = 'REGEN'
+}
+
+export const ELEMENTS = Object.values(ElementKind);
+export const CARD_TYPES = Object.values(CardType);
+export const CARD_RARITIES = Object.values(CardRarity);
+export const STATUS_EFFECTS = Object.values(StatusEffectType);
+export const WEATHER_TYPES = Object.values(WeatherKind);
+export const GAME_PHASES = Object.values(GamePhase);
 
 export interface IWeather {
   type: WeatherKind;
   duration: number;
+  turnsLeft?: number;
 }
 
 export interface ICardData {
   id: string;
   name: string;
   type: CardType;
-  element: ElementType;
+  element: ElementKind;
   mpCost: number;
   faithCost: number;
   comboValue: number;
   description: string;
   power?: number;
   shield?: number;
-  effects?: string[];
+  effects?: StatusEffectType[];
   rarity?: CardRarity;
   isPlayable?: boolean;
   requirements?: {
@@ -100,6 +145,7 @@ export interface IStatusEffect {
   duration: number;
   description: string;
   value: number;
+  turnsLeft?: number;
 }
 
 export interface IGameEvent {
