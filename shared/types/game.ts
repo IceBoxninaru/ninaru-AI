@@ -1,15 +1,63 @@
-export type WeatherKind = 'SUNNY' | 'RAINY' | 'CLOUDY' | 'STORMY' | 'WINDY';
+export type WeatherKind =
+  | 'SUNNY'
+  | 'RAINY'
+  | 'CLOUDY'
+  | 'STORMY'
+  | 'WINDY'
+  | 'FOGGY'
+  | 'SNOWY'
+  | 'SACRED'
+  | 'CLEAR';
 export type ElementKind = 'FIRE' | 'WATER' | 'EARTH' | 'WIND' | 'LIGHT' | 'DARK' | 'NEUTRAL';
-export type CardType = 'ATTACK' | 'DEFENSE' | 'SUPPORT' | 'SPECIAL';
+export type CardType = 'ATTACK' | 'DEFENSE' | 'MAGIC' | 'SUPPORT' | 'SPECIAL';
 export type CardRarity = 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
 export type GamePhase = 'WAIT' | 'DRAW' | 'MAIN' | 'END';
-export type StatusEffectType = 'SHIELD' | 'REGENERATION' | 'POISON' | 'BURN' | 'FREEZE' | 'STUN';
+export type StatusEffectType =
+  | 'SHIELD'
+  | 'REGEN'
+  | 'REGENERATION'
+  | 'POISON'
+  | 'BURN'
+  | 'FREEZE'
+  | 'STUN'
+  | 'CURSE'
+  | 'BLESS'
+  | 'RAGE'
+  | 'PURIFY'
+  | 'PARALYZE'
+  | 'STRENGTHEN'
+  | 'WEAKEN';
 
 export const ELEMENTS: ElementKind[] = ['FIRE', 'WATER', 'EARTH', 'WIND', 'LIGHT', 'DARK', 'NEUTRAL'];
-export const CARD_TYPES: CardType[] = ['ATTACK', 'DEFENSE', 'SUPPORT', 'SPECIAL'];
+export const CARD_TYPES: CardType[] = ['ATTACK', 'DEFENSE', 'MAGIC', 'SUPPORT', 'SPECIAL'];
 export const CARD_RARITIES: CardRarity[] = ['COMMON', 'UNCOMMON', 'RARE', 'EPIC', 'LEGENDARY'];
-export const STATUS_EFFECTS: StatusEffectType[] = ['SHIELD', 'REGENERATION', 'POISON', 'BURN', 'FREEZE', 'STUN'];
-export const WEATHER_TYPES: WeatherKind[] = ['SUNNY', 'RAINY', 'CLOUDY', 'STORMY', 'WINDY'];
+export const STATUS_EFFECTS: StatusEffectType[] = [
+  'SHIELD',
+  'REGEN',
+  'REGENERATION',
+  'POISON',
+  'BURN',
+  'FREEZE',
+  'STUN',
+  'CURSE',
+  'BLESS',
+  'RAGE',
+  'PURIFY',
+  'PARALYZE',
+  'STRENGTHEN',
+  'WEAKEN'
+];
+export const WEATHER_TYPES: WeatherKind[] = [
+  'SUNNY',
+  'RAINY',
+  'CLOUDY',
+  'STORMY',
+  'WINDY',
+  'FOGGY',
+  'SNOWY',
+  'SACRED',
+  'CLEAR'
+];
 export const GAME_PHASES: GamePhase[] = ['WAIT', 'DRAW', 'MAIN', 'END'];
 
 export interface IWeather {
