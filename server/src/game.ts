@@ -13,6 +13,10 @@ import {
 import { WEATHER_CONFIG } from '../schema/weather';
 import { v4 as uuidv4 } from 'uuid';
 import { Player } from './player';
+import {
+  calculateDamage as utilCalculateDamage,
+  applyStatusEffect as utilApplyStatusEffect
+} from '../../shared/utils/gameUtils';
 
 export class Game {
   private state: IGameState;
@@ -34,7 +38,7 @@ export class Game {
       currentPlayerId: '',
       players: [],
       weather: this.generateInitialWeather(),
-      phase: 'WAIT',
+      phase: GamePhase.WAIT,
       turn: 1
     };
   }
@@ -65,7 +69,7 @@ export class Game {
   }
 
   private startGame(): void {
-    this.state.phase = 'DRAW';
+    this.state.phase = GamePhase.DRAW;
     this.state.players.forEach(player => {
       if (player instanceof Player) {
         player.drawCard();
@@ -76,7 +80,7 @@ export class Game {
 
   public handleCardPlay(playerId: string, cardIndex: number, targetId?: string): void {
     const player = this.state.players.find(p => p.id === playerId);
-    if (!player || this.state.currentPlayerId !== playerId || this.state.phase !== 'MAIN') return;
+    if (!player || this.state.currentPlayerId !== playerId || this.state.phase !== GamePhase.MAIN) return;
 
     const card = player.hand[cardIndex];
     if (!card || player.mp < card.mpCost * player.mpCostMultiplier) return;
@@ -137,16 +141,16 @@ export class Game {
         break;
       case 'DEFENSE':
         if (card.shield) {
-          target.addStatus('SHIELD', 1);
+          target.addStatus(StatusEffectType.SHIELD, 1);
         }
         break;
       case 'SUPPORT':
         if (card.effects) {
           card.effects.forEach(effect => {
-            if (effect === 'REGENERATION') {
+            if (effect === StatusEffectType.REGENERATION) {
               target.heal(Math.floor(target.maxHp * 0.2));
             }
-            target.addStatus(effect, 2);
+            target.addStatus(effect as StatusEffectType, 2);
           });
         }
         break;
@@ -157,9 +161,9 @@ export class Game {
     const target = this.state.players.find(p => p.id === event.targetId);
     if (!target) return;
 
-    if (target.status.has('SHIELD')) {
+    if (target.status.has(StatusEffectType.SHIELD)) {
       event.isBlocked = true;
-      target.removeStatus('SHIELD');
+      target.removeStatus(StatusEffectType.SHIELD);
     } else {
       target.takeDamage(event.amount);
     }
@@ -168,7 +172,7 @@ export class Game {
   }
 
   public endTurn(playerId: string): void {
-    if (this.state.currentPlayerId !== playerId || this.state.phase !== 'MAIN') return;
+    if (this.state.currentPlayerId !== playerId || this.state.phase !== GamePhase.MAIN) return;
 
     const currentPlayer = this.state.players[this.currentPlayerIndex];
     
@@ -188,7 +192,7 @@ export class Game {
     this.updateWeather();
 
     // フェーズの更新
-    this.state.phase = 'DRAW';
+    this.state.phase = GamePhase.DRAW;
     this.broadcastGameState();
   }
 
@@ -211,6 +215,26 @@ export class Game {
     });
   }
 
+  public setWeather(weather: IWeather): void {
+    this.state.weather = weather;
+    this.broadcastGameState();
+  }
+
+  public calculateDamage(
+    power: number,
+    attacker: IPlayer,
+    defender: IPlayer,
+    element: ElementKind
+  ): number {
+    return utilCalculateDamage(power, attacker, defender, element, this.state.weather);
+  }
+
+  public applyStatusEffect(playerId: string, effect: StatusEffectType): void {
+    const player = this.state.players.find(p => p.id === playerId);
+    if (!player) return;
+    utilApplyStatusEffect(player, effect);
+  }
+
   public removePlayer(playerId: string): void {
     const playerIndex = this.state.players.findIndex(p => p.id === playerId);
     if (playerIndex !== -1) {
@@ -227,7 +251,7 @@ export class Game {
   private checkGameEnd(): void {
     const alivePlayers = this.state.players.filter(p => p.hp > 0);
     if (alivePlayers.length <= 1 && this.state.players.length > 1) {
-      this.state.phase = 'END';
+      this.state.phase = GamePhase.END;
       this.state.winner = alivePlayers[0]?.id;
       this.broadcastGameState();
     }
