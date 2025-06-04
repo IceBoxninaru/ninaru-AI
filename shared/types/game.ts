@@ -1,64 +1,72 @@
-export type WeatherKind =
-  | 'SUNNY'
-  | 'RAINY'
-  | 'CLOUDY'
-  | 'STORMY'
-  | 'WINDY'
-  | 'FOGGY'
-  | 'SNOWY'
-  | 'SACRED'
-  | 'CLEAR';
-export type ElementKind = 'FIRE' | 'WATER' | 'EARTH' | 'WIND' | 'LIGHT' | 'DARK' | 'NEUTRAL';
-export type CardType = 'ATTACK' | 'DEFENSE' | 'MAGIC' | 'SUPPORT' | 'SPECIAL';
-export type CardRarity = 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
-export type GamePhase = 'WAIT' | 'DRAW' | 'MAIN' | 'END';
-export type StatusEffectType =
-  | 'SHIELD'
-  | 'REGEN'
-  | 'REGENERATION'
-  | 'POISON'
-  | 'BURN'
-  | 'FREEZE'
-  | 'STUN'
-  | 'CURSE'
-  | 'BLESS'
-  | 'RAGE'
-  | 'PURIFY'
-  | 'PARALYZE'
-  | 'STRENGTHEN'
-  | 'WEAKEN';
+export enum WeatherKind {
+  SUNNY = 'SUNNY',
+  RAINY = 'RAINY',
+  CLOUDY = 'CLOUDY',
+  STORMY = 'STORMY',
+  WINDY = 'WINDY',
+  FOGGY = 'FOGGY',
+  SNOWY = 'SNOWY',
+  SACRED = 'SACRED',
+  CLEAR = 'CLEAR'
+}
 
-export const ELEMENTS: ElementKind[] = ['FIRE', 'WATER', 'EARTH', 'WIND', 'LIGHT', 'DARK', 'NEUTRAL'];
-export const CARD_TYPES: CardType[] = ['ATTACK', 'DEFENSE', 'MAGIC', 'SUPPORT', 'SPECIAL'];
-export const CARD_RARITIES: CardRarity[] = ['COMMON', 'UNCOMMON', 'RARE', 'EPIC', 'LEGENDARY'];
-export const STATUS_EFFECTS: StatusEffectType[] = [
-  'SHIELD',
-  'REGEN',
-  'REGENERATION',
-  'POISON',
-  'BURN',
-  'FREEZE',
-  'STUN',
-  'CURSE',
-  'BLESS',
-  'RAGE',
-  'PURIFY',
-  'PARALYZE',
-  'STRENGTHEN',
-  'WEAKEN'
-];
-export const WEATHER_TYPES: WeatherKind[] = [
-  'SUNNY',
-  'RAINY',
-  'CLOUDY',
-  'STORMY',
-  'WINDY',
-  'FOGGY',
-  'SNOWY',
-  'SACRED',
-  'CLEAR'
-];
-export const GAME_PHASES: GamePhase[] = ['WAIT', 'DRAW', 'MAIN', 'END'];
+export enum ElementKind {
+  FIRE = 'FIRE',
+  WATER = 'WATER',
+  EARTH = 'EARTH',
+  WIND = 'WIND',
+  LIGHT = 'LIGHT',
+  DARK = 'DARK',
+  NEUTRAL = 'NEUTRAL'
+}
+
+export enum CardKind {
+  ATTACK = 'ATTACK',
+  DEFENSE = 'DEFENSE',
+  MAGIC = 'MAGIC',
+  SUPPORT = 'SUPPORT',
+  SPECIAL = 'SPECIAL'
+}
+export type CardType = CardKind;
+
+export enum CardRarity {
+  COMMON = 'COMMON',
+  UNCOMMON = 'UNCOMMON',
+  RARE = 'RARE',
+  EPIC = 'EPIC',
+  LEGENDARY = 'LEGENDARY'
+}
+
+export enum GamePhase {
+  WAIT = 'WAIT',
+  DRAW = 'DRAW',
+  MAIN = 'MAIN',
+  END = 'END'
+}
+
+export enum StatusEffectType {
+  SHIELD = 'SHIELD',
+  REGEN = 'REGEN',
+  REGENERATION = 'REGENERATION',
+  POISON = 'POISON',
+  BURN = 'BURN',
+  FREEZE = 'FREEZE',
+  STUN = 'STUN',
+  CURSE = 'CURSE',
+  BLESS = 'BLESS',
+  RAGE = 'RAGE',
+  PURIFY = 'PURIFY',
+  PARALYZE = 'PARALYZE',
+  STRENGTHEN = 'STRENGTHEN',
+  WEAKEN = 'WEAKEN'
+}
+
+export const ELEMENTS: ElementKind[] = Object.values(ElementKind);
+export const CARD_TYPES: CardType[] = Object.values(CardKind);
+export const CARD_RARITIES: CardRarity[] = Object.values(CardRarity);
+export const STATUS_EFFECTS: StatusEffectType[] = Object.values(StatusEffectType);
+export const WEATHER_TYPES: WeatherKind[] = Object.values(WeatherKind);
+export const GAME_PHASES: GamePhase[] = Object.values(GamePhase);
 
 export interface IWeather {
   type: WeatherKind;
