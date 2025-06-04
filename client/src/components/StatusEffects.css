@@ -1,0 +1,23 @@
+.status-effects {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.status-effect {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  background-color: #3a3a3a;
+  border-radius: 4px;
+}
+
+.status-icon {
+  font-size: 1.2em;
+}
+
+.status-duration {
+  font-size: 0.9em;
+  color: #aaaaaa;
+} 

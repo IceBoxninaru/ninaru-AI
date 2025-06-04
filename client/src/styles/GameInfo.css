@@ -1,0 +1,77 @@
+.game-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.info-section h3 {
+  margin: 0;
+  color: #4a90e2;
+  font-size: 1.5em;
+}
+
+.phase-indicator {
+  font-size: 1.2em;
+  color: #aaa;
+}
+
+.weather-info,
+.field-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 15px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+}
+
+.info-icon {
+  font-size: 1.5em;
+}
+
+.info-label {
+  font-size: 1.1em;
+  color: #fff;
+}
+
+.game-info h2 {
+  margin: 0 0 15px 0;
+  color: #333;
+  text-align: center;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  padding: 10px 15px;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.label {
+  color: #666;
+  font-weight: bold;
+}
+
+.value {
+  color: #333;
+} 

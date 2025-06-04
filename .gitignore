@@ -1,0 +1,12 @@
+# 依存関係（アップロード不要）
+node_modules/
+client/node_modules/
+
+# ビルド成果物
+dist/
+
+# 設定系・ログ・一時ファイル
+.env
+.vscode/
+.cursor/
+*.log

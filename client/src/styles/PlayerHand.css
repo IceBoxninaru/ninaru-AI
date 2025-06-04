@@ -1,0 +1,126 @@
+.player-hand {
+  width: 100%;
+  padding: 20px;
+  position: relative;
+  perspective: 1000px;
+}
+
+.player-hand__cards {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px;
+  min-height: 320px;
+}
+
+.player-hand__card-wrapper {
+  position: relative;
+  transition: all 0.3s ease;
+  transform-origin: bottom center;
+  will-change: transform;
+}
+
+.player-hand__card-wrapper:hover {
+  transform: translateY(-20px) scale(1.05);
+  z-index: 10;
+}
+
+.player-hand__card-wrapper--selected {
+  transform: translateY(-30px) scale(1.1);
+  z-index: 20;
+}
+
+/* カードの配置アニメーション */
+@keyframes deal-card {
+  from {
+    opacity: 0;
+    transform: translateY(100px) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.player-hand__card-wrapper {
+  animation: deal-card 0.5s ease-out backwards;
+}
+
+.player-hand__card-wrapper:nth-child(1) { animation-delay: 0.1s; }
+.player-hand__card-wrapper:nth-child(2) { animation-delay: 0.2s; }
+.player-hand__card-wrapper:nth-child(3) { animation-delay: 0.3s; }
+.player-hand__card-wrapper:nth-child(4) { animation-delay: 0.4s; }
+.player-hand__card-wrapper:nth-child(5) { animation-delay: 0.5s; }
+
+/* 扇状の配置 */
+.player-hand__card-wrapper:nth-child(1) { transform: rotate(-10deg); }
+.player-hand__card-wrapper:nth-child(2) { transform: rotate(-5deg); }
+.player-hand__card-wrapper:nth-child(3) { transform: rotate(0deg); }
+.player-hand__card-wrapper:nth-child(4) { transform: rotate(5deg); }
+.player-hand__card-wrapper:nth-child(5) { transform: rotate(10deg); }
+
+/* ホバー時は回転を解除 */
+.player-hand__card-wrapper:hover,
+.player-hand__card-wrapper--selected {
+  transform: translateY(-20px) scale(1.05) rotate(0deg) !important;
+}
+
+.card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  width: 200px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.card-name {
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.card-cost {
+  background-color: #4CAF50;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.9em;
+}
+
+.card-type {
+  color: #666;
+  font-size: 0.9em;
+  margin-bottom: 5px;
+}
+
+.card-element {
+  color: #2196F3;
+  font-size: 0.9em;
+  margin-bottom: 5px;
+}
+
+.card-power,
+.card-shield {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.card-description {
+  font-size: 0.9em;
+  color: #666;
+  margin-top: 10px;
+  line-height: 1.4;
+} 

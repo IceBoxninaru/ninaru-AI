@@ -1,0 +1,58 @@
+.weather-display {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1rem;
+  min-width: 200px;
+  text-align: center;
+}
+
+.weather-display__name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.weather-display__effect {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.weather-display__effect-icon {
+  font-size: 1.5rem;
+}
+
+.weather-display__effect-chance {
+  color: #ffd700;
+}
+
+.weather-display__elements {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.weather-display__element {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.weather-display__element--bonus {
+  background: rgba(0, 255, 0, 0.2);
+  color: #90ee90;
+}
+
+.weather-display__element--penalty {
+  background: rgba(255, 0, 0, 0.2);
+  color: #ff6b6b;
+}
+
+.weather-display__duration {
+  font-size: 0.9rem;
+  color: #aaa;
+} 

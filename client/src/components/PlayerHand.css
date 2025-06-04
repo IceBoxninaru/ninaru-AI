@@ -1,0 +1,75 @@
+.player-hand {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.card {
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  padding: 1rem;
+  min-width: 200px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  user-select: none;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+}
+
+.card.selected {
+  border: 2px solid #4CAF50;
+  transform: translateY(-8px);
+}
+
+.card.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.card-name {
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.card-cost {
+  background-color: #4a4a4a;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.card-type,
+.card-element {
+  background-color: #3a3a3a;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+
+.card-description {
+  margin: 1rem 0;
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
+.card-power,
+.card-shield,
+.card-effects {
+  background-color: #3a3a3a;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+  font-size: 0.9em;
+} 

@@ -1,0 +1,145 @@
+.recovery-status {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1100;
+}
+
+.recovery-status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  border-radius: 12px 12px 0 0;
+}
+
+.recovery-status-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #343a40;
+}
+
+.recovery-status-header .close-button {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: #6c757d;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.2s;
+}
+
+.recovery-status-header .close-button:hover {
+  color: #343a40;
+}
+
+.recovery-status-content {
+  padding: 1.5rem;
+}
+
+.recovery-in-progress {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #fff3cd;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #ffc107;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.recovery-stats {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+}
+
+.stat-label {
+  color: #495057;
+  font-weight: 500;
+}
+
+.stat-value {
+  font-weight: 600;
+  color: #212529;
+}
+
+.recovery-legend {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.legend-color.success {
+  background-color: var(--success-color);
+}
+
+.legend-color.failure {
+  background-color: var(--failure-color);
+}
+
+.legend-color.in-progress {
+  background-color: var(--warning-color);
+}
+
+.legend-label {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.recovery-chart {
+  height: 24px;
+  background-color: #e9ecef;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+}
+
+:root {
+  --success-color: #28a745;
+  --failure-color: #dc3545;
+  --warning-color: #ffc107;
+} 
