@@ -36,7 +36,7 @@ export interface ICardInfo {
   isPlayable: boolean;
 }
 
-// ステータス効果の設定
+// ステータス効果の設定をする
 export interface IStatusEffectConfig {
   name: string;
   description: string;
