@@ -1,6 +1,6 @@
 import React from 'react';
-import { ErrorTemplate } from '../types/error';
-import { ErrorMessageManager } from '../utils/errorMessageManager';
+import { ErrorTemplate } from '../types/error.js';
+import { ErrorMessageManager } from '../utils/errorMessageManager.js';
 import './ErrorDisplay.css';
 
 interface ErrorDisplayProps {

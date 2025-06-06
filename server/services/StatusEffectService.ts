@@ -1,4 +1,4 @@
-import { Player, StatusEffect, StatusEffectType, CardKind } from '../../shared/types/game';
+import { Player, StatusEffect, StatusEffectType, CardKind } from '../../shared/types/game.js';
 
 interface StatusEffectData {
   name: string;

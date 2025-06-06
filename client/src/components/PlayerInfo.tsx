@@ -1,6 +1,6 @@
 import React from 'react';
-import { IPlayerData, StatusEffectType } from '../../../shared/types/game';
-import { STATUS_EFFECT_CONFIG } from '../../../server/schema/weather';
+import { IPlayerData, StatusEffectType } from '../../../shared/types/game.js';
+import { STATUS_EFFECT_CONFIG } from '../../../server/schema/weather.js';
 import '../styles/PlayerInfo.css';
 
 interface PlayerInfoProps {

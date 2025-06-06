@@ -1,8 +1,8 @@
 import React from 'react';
-import { IPlayer, IGameState } from '../../../shared/types/game';
+import { IPlayer, IGameState } from '../../../shared/types/game.js';
 import './GameBoard.css';
 
-interface GameBoardProps {
+export interface GameBoardProps {
   gameState: IGameState;
   currentPlayerId: string;
   onPlayCard: (cardIndex: number, targetId: string) => void;
@@ -34,7 +34,13 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     <div className="game-board">
       <div className="game-info">
         <div>ターン: {currentTurn}</div>
-        <div>天候: {weather.type}</div>
+        <div>天候: {weather.type} ({weather.duration})</div>
+      </div>
+
+      <div className="weather-effects" data-testid="weather-effects">
+        {weather.type === 'SUNNY' && <div>火属性: 1.2x</div>}
+        {weather.type === 'RAINY' && <div>水属性: 1.2x</div>}
+        {weather.type === 'WINDY' && <div>風属性: 1.2x</div>}
       </div>
 
       <div className="players">
@@ -51,10 +57,15 @@ export const GameBoard: React.FC<GameBoardProps> = ({
               <div>コンボ: {player.combo}</div>
             </div>
             {player.statusEffects.length > 0 && (
-              <div className="status-effects">
+              <div className="status-effects" data-testid="status-effects">
                 {player.statusEffects.map((effect, index) => (
                   <div key={index} className="status-effect">
-                    {effect.name}({effect.turnsLeft})
+                    {effect.type === 'BURN' && '火傷'}
+                    {effect.type === 'POISON' && '毒'}
+                    {effect.type === 'FREEZE' && '凍結'}
+                    {effect.type === 'STUN' && '麻痺'}
+                    {effect.type === 'SHIELD' && '防御'}
+                    ({effect.duration})
                   </div>
                 ))}
               </div>
@@ -88,4 +99,4 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   );
 };
 
-export default GameBoard; 
+ 

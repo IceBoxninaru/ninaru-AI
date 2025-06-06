@@ -12,7 +12,7 @@ export type {
   IGameState,
   IStatusEffect,
   IGameEvent,
-  IWeatherData,
+  WeatherData,  // ← IWeatherData の代わりに WeatherData を使用
   Card,
   Player,
   GameState,
@@ -20,4 +20,4 @@ export type {
   WeatherType,
   StatusEffect,
   PlayerData
-} from '../../../shared/types/game'; 
+} from '../../../shared/types/game.js';

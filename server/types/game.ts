@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Card, Player, GameState, ElementType, CardType, GamePhase, WeatherType, StatusEffect, GAME_PHASES, WEATHER_TYPES } from '../../shared/types/game';
+import { Card, Player, GameState, ElementType, CardType, GamePhase, WeatherType, StatusEffect, GAME_PHASES, WEATHER_TYPES } from '../../shared/types/game.js';
 
 export const PlayerSchema = z.object({
   id: z.string(),

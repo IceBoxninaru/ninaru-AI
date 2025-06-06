@@ -1,4 +1,4 @@
-import { GameState, ICardData, IPlayer } from '../../../shared/types/game';
+import { GameState, ICardData, IPlayer } from '../../../shared/types/game.js';
 
 interface RecoveryState {
   gameState?: Partial<GameState>;

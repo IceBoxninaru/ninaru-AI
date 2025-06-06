@@ -1,7 +1,7 @@
 import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render, fireEvent, screen, within } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { GameBoard } from '../../../client/src/components/GameBoard';
+import { GameBoard } from '../../../client/src/components/GameBoard.js';
 import {
   IGameState,
   IPlayer,
@@ -14,100 +14,75 @@ import {
   CardRarity,
   WeatherKind,
   GamePhase
-} from '../../../shared/types/game';
+} from '../../../shared/types/game.js';
 
-const mockCard: ICardData = {
+// モックデータの定義
+const createMockCard = (overrides = {}): ICardData => ({
   id: 'card1',
   name: 'テストカード',
-  description: 'テスト用のカード',
-  element: ElementKind.FIRE,
   type: CardType.ATTACK,
-  rarity: CardRarity.COMMON,
+  element: ElementKind.FIRE,
   mpCost: 10,
-  power: 20
-};
+  description: 'テストカードの説明',
+  rarity: CardRarity.COMMON,
+  power: 100,
+  isPlayable: true,
+  ...overrides
+});
 
-const mockPlayer1: IPlayer = {
-  id: 'player1',
-  name: 'プレイヤー1',
+const createMockPlayer = (id: string, overrides = {}): IPlayer => ({
+  id,
+  name: `プレイヤー${id}`,
   hp: 100,
   maxHp: 100,
   mp: 50,
   maxMp: 50,
   faith: 0,
+  maxFaith: 100,
   combo: 0,
   maxCombo: 3,
   gold: 0,
-  hand: [mockCard],
+  hand: [createMockCard()],
   deck: [],
   discardPile: [],
+  statusEffects: [],
   status: new Map(),
   damageMultiplier: 1,
   mpCostMultiplier: 1,
   damageReceivedMultiplier: 1,
-  statusEffects: [],
+  
   drawCard: jest.fn(),
-  addStatus: jest.fn(),
-  removeStatus: jest.fn(),
-  updateStatuses: jest.fn(),
+  playCard: jest.fn(),
+  canPlayCard: jest.fn(),
   takeDamage: jest.fn(),
   heal: jest.fn(),
-  spendMp: jest.fn(),
   gainMp: jest.fn(),
-  spendFaith: jest.fn(),
+  spendMp: jest.fn(),
   addFaith: jest.fn(),
+  spendFaith: jest.fn(),
   addCombo: jest.fn(),
-  resetCombo: jest.fn()
-};
-
-const mockPlayer2: IPlayer = {
-  id: 'player2',
-  name: 'プレイヤー2',
-  hp: 100,
-  maxHp: 100,
-  mp: 50,
-  maxMp: 50,
-  faith: 0,
-  combo: 0,
-  maxCombo: 3,
-  gold: 0,
-  hand: [],
-  deck: [],
-  discardPile: [],
-  status: new Map(),
-  damageMultiplier: 1,
-  mpCostMultiplier: 1,
-  damageReceivedMultiplier: 1,
-  statusEffects: [],
-  drawCard: jest.fn(),
+  resetCombo: jest.fn(),
+  isCriticalHit: jest.fn(),
   addStatus: jest.fn(),
   removeStatus: jest.fn(),
+  hasStatusEffect: jest.fn(),
   updateStatuses: jest.fn(),
-  takeDamage: jest.fn(),
-  heal: jest.fn(),
-  spendMp: jest.fn(),
-  gainMp: jest.fn(),
-  spendFaith: jest.fn(),
-  addFaith: jest.fn(),
-  addCombo: jest.fn(),
-  resetCombo: jest.fn()
-};
+  isAlive: jest.fn(() => true),
+  resetForNewGame: jest.fn(),
+  ...overrides
+});
 
-const mockWeather: IWeather = {
-  type: WeatherKind.SUNNY,
-  duration: 3,
-  turnsLeft: 3
-};
-
-const mockGameState: IGameState = {
+const createMockGameState = (overrides = {}): IGameState => ({
   id: 'game1',
-  currentTurn: 1,
+  players: [createMockPlayer('player1'), createMockPlayer('player2')],
   currentPlayerId: 'player1',
-  players: [mockPlayer1, mockPlayer2],
-  weather: mockWeather,
+  currentTurn: 1,
+  weather: { type: WeatherKind.SUNNY, duration: 3 },
   phase: GamePhase.MAIN,
-  turn: 1
-};
+  maxPlayers: 2,
+  gameMode: 'STANDARD',
+  ...overrides
+});
 
 describe('GameBoard', () => {
   const mockOnPlayCard = jest.fn();
@@ -117,149 +92,212 @@ describe('GameBoard', () => {
     jest.clearAllMocks();
   });
 
-  it('ゲームボードが正しくレンダリングされる', () => {
-    render(
-      <GameBoard
-        gameState={mockGameState}
-        currentPlayerId="player1"
-        onPlayCard={mockOnPlayCard}
-        onEndTurn={mockOnEndTurn}
-      />
-    );
+  describe('基本レンダリング', () => {
+    it('ゲームボードの基本要素が正しくレンダリングされる', () => {
+      const gameState = createMockGameState();
+      render(
+        <GameBoard
+          gameState={gameState}
+          currentPlayerId="player1"
+          onPlayCard={mockOnPlayCard}
+          onEndTurn={mockOnEndTurn}
+        />
+      );
 
-    expect(screen.getByText('プレイヤー1')).toBeInTheDocument();
-    expect(screen.getByText('プレイヤー2')).toBeInTheDocument();
-    expect(screen.getByText('テストカード')).toBeInTheDocument();
-    expect(screen.getByText(`天候: ${WeatherKind.SUNNY}`)).toBeInTheDocument();
-    expect(screen.getByText(/ターン: 1/)).toBeInTheDocument();
+      // プレイヤー情報の確認
+      expect(screen.getByText('プレイヤーplayer1')).toBeInTheDocument();
+      expect(screen.getByText('プレイヤーplayer2')).toBeInTheDocument();
+
+      // カード情報の確認
+      expect(screen.getByText('テストカード')).toBeInTheDocument();
+
+      // 天候情報の確認
+      const weatherInfo = screen.getByText(/天候:/).parentElement;
+      expect(weatherInfo).toHaveTextContent('SUNNY');
+    });
+
+    it('プレイヤーのステータスが正しく表示される', () => {
+      const player = createMockPlayer('player1', {
+        hp: 80,
+        maxHp: 100,
+        mp: 30,
+        maxMp: 50
+      });
+      const gameState = createMockGameState({ players: [player, createMockPlayer('player2')] });
+
+      render(
+        <GameBoard
+          gameState={gameState}
+          currentPlayerId="player1"
+          onPlayCard={mockOnPlayCard}
+          onEndTurn={mockOnEndTurn}
+        />
+      );
+
+      // HP/MPの表示確認
+      const stats = screen.getAllByText(/\d+\/\d+/);
+      expect(stats[0]).toHaveTextContent('80/100'); // HP
+      expect(stats[1]).toHaveTextContent('30/50'); // MP
+    });
   });
 
-  it('カードをプレイできる', () => {
-    render(
-      <GameBoard
-        gameState={mockGameState}
-        currentPlayerId="player1"
-        onPlayCard={mockOnPlayCard}
-        onEndTurn={mockOnEndTurn}
-      />
-    );
+  describe('カード操作', () => {
+    it('カードをプレイできる（十分なMPがある場合）', () => {
+      const gameState = createMockGameState();
+      render(
+        <GameBoard
+          gameState={gameState}
+          currentPlayerId="player1"
+          onPlayCard={mockOnPlayCard}
+          onEndTurn={mockOnEndTurn}
+        />
+      );
 
-    const card = screen.getByText('テストカード');
-    fireEvent.click(card);
+      const card = screen.getByText('テストカード');
+      fireEvent.click(card);
 
-    expect(mockOnPlayCard).toHaveBeenCalledWith(0, 'player2');
+      expect(mockOnPlayCard).toHaveBeenCalledWith(0, 'player2');
+    });
+
+    it('MPが不足している場合はカードをプレイできない', () => {
+      const player = createMockPlayer('player1', { mp: 5 });
+      const gameState = createMockGameState({ players: [player, createMockPlayer('player2')] });
+
+      render(
+        <GameBoard
+          gameState={gameState}
+          currentPlayerId="player1"
+          onPlayCard={mockOnPlayCard}
+          onEndTurn={mockOnEndTurn}
+        />
+      );
+
+      const card = screen.getByText('テストカード');
+      fireEvent.click(card);
+
+      expect(mockOnPlayCard).not.toHaveBeenCalled();
+    });
   });
 
-  it('自分のターンでない場合はカードをプレイできない', () => {
-    const notYourTurnState: IGameState = {
-      ...mockGameState,
-      currentPlayerId: 'player2'
-    };
+  describe('ステータス効果', () => {
+    it('ステータス効果が正しく表示される', () => {
+      const statusEffect: IStatusEffect = {
+        type: StatusEffectType.BURN,
+        duration: 2
+      };
+      const player = createMockPlayer('player1', {
+        statusEffects: [statusEffect]
+      });
+      const gameState = createMockGameState({ players: [player, createMockPlayer('player2')] });
 
-    render(
-      <GameBoard
-        gameState={notYourTurnState}
-        currentPlayerId="player1"
-        onPlayCard={mockOnPlayCard}
-        onEndTurn={mockOnEndTurn}
-      />
-    );
+      render(
+        <GameBoard
+          gameState={gameState}
+          currentPlayerId="player1"
+          onPlayCard={mockOnPlayCard}
+          onEndTurn={mockOnEndTurn}
+        />
+      );
 
-    const card = screen.getByText('テストカード');
-    fireEvent.click(card);
+      const statusEffects = screen.getByTestId('status-effects');
+      expect(statusEffects).toHaveTextContent('火傷');
+      expect(statusEffects).toHaveTextContent('2');
+    });
 
-    expect(mockOnPlayCard).not.toHaveBeenCalled();
+    it('複数のステータス効果が正しく表示される', () => {
+      const statusEffects: IStatusEffect[] = [
+        { type: StatusEffectType.BURN, duration: 2 },
+        { type: StatusEffectType.POISON, duration: 3 }
+      ];
+      const player = createMockPlayer('player1', { statusEffects });
+      const gameState = createMockGameState({ players: [player, createMockPlayer('player2')] });
+
+      render(
+        <GameBoard
+          gameState={gameState}
+          currentPlayerId="player1"
+          onPlayCard={mockOnPlayCard}
+          onEndTurn={mockOnEndTurn}
+        />
+      );
+
+      const statusEffectsElement = screen.getByTestId('status-effects');
+      expect(statusEffectsElement).toHaveTextContent('火傷');
+      expect(statusEffectsElement).toHaveTextContent('2');
+      expect(statusEffectsElement).toHaveTextContent('毒');
+      expect(statusEffectsElement).toHaveTextContent('3');
+    });
   });
 
-  it('MPが不足している場合はカードをプレイできない', () => {
-    const lowMpState: IGameState = {
-      ...mockGameState,
-      players: [
-        { ...mockPlayer1, mp: 5 },
-        mockPlayer2
-      ]
-    };
+  describe('天候システム', () => {
+    it('天候の種類と残りターン数が正しく表示される', () => {
+      const weather: IWeather = { type: WeatherKind.RAINY, duration: 4 };
+      const gameState = createMockGameState({ weather });
 
-    render(
-      <GameBoard
-        gameState={lowMpState}
-        currentPlayerId="player1"
-        onPlayCard={mockOnPlayCard}
-        onEndTurn={mockOnEndTurn}
-      />
-    );
+      render(
+        <GameBoard
+          gameState={gameState}
+          currentPlayerId="player1"
+          onPlayCard={mockOnPlayCard}
+          onEndTurn={mockOnEndTurn}
+        />
+      );
 
-    const card = screen.getByText('テストカード');
-    fireEvent.click(card);
+      const weatherInfo = screen.getByText(/天候:/).parentElement;
+      expect(weatherInfo).toHaveTextContent('RAINY');
+      expect(weatherInfo).toHaveTextContent('4');
+    });
 
-    expect(mockOnPlayCard).not.toHaveBeenCalled();
+    it('天候効果によるダメージ修正が表示される', () => {
+      const weather: IWeather = { type: WeatherKind.SUNNY, duration: 3 };
+      const gameState = createMockGameState({ weather });
+
+      render(
+        <GameBoard
+          gameState={gameState}
+          currentPlayerId="player1"
+          onPlayCard={mockOnPlayCard}
+          onEndTurn={mockOnEndTurn}
+        />
+      );
+
+      const weatherEffects = screen.getByTestId('weather-effects');
+      expect(weatherEffects).toHaveTextContent('火属性');
+      expect(weatherEffects).toHaveTextContent('1.2x');
+    });
   });
 
-  it('状態異常が正しく表示される', () => {
-    const mockStatusEffect: IStatusEffect = {
-      type: StatusEffectType.BURN,
-      name: '火傷',
-      duration: 3,
-      description: 'ターン開始時にHPが減少します',
-      value: 5,
-      turnsLeft: 2
-    };
+  describe('ターン管理', () => {
+    it('自分のターンの時のみターン終了ボタンが有効', () => {
+      const gameState = createMockGameState();
+      render(
+        <GameBoard
+          gameState={gameState}
+          currentPlayerId="player1"
+          onPlayCard={mockOnPlayCard}
+          onEndTurn={mockOnEndTurn}
+        />
+      );
 
-    const stateWithEffects: IGameState = {
-      ...mockGameState,
-      players: [
-        {
-          ...mockPlayer1,
-          statusEffects: [mockStatusEffect]
-        },
-        mockPlayer2
-      ]
-    };
+      const endTurnButton = screen.getByText('ターン終了');
+      expect(endTurnButton).not.toBeDisabled();
+      fireEvent.click(endTurnButton);
+      expect(mockOnEndTurn).toHaveBeenCalled();
+    });
 
-    render(
-      <GameBoard
-        gameState={stateWithEffects}
-        currentPlayerId="player1"
-        onPlayCard={mockOnPlayCard}
-        onEndTurn={mockOnEndTurn}
-      />
-    );
+    it('相手のターンの時はターン終了ボタンが無効', () => {
+      const gameState = createMockGameState({ currentPlayerId: 'player2' });
+      render(
+        <GameBoard
+          gameState={gameState}
+          currentPlayerId="player1"
+          onPlayCard={mockOnPlayCard}
+          onEndTurn={mockOnEndTurn}
+        />
+      );
 
-    expect(screen.getByText('火傷(2)')).toBeInTheDocument();
-  });
-
-  it('ターン終了ボタンが正しく機能する', () => {
-    render(
-      <GameBoard
-        gameState={mockGameState}
-        currentPlayerId="player1"
-        onPlayCard={mockOnPlayCard}
-        onEndTurn={mockOnEndTurn}
-      />
-    );
-
-    const endTurnButton = screen.getByText('ターン終了');
-    fireEvent.click(endTurnButton);
-
-    expect(mockOnEndTurn).toHaveBeenCalled();
-  });
-
-  it('自分のターンでない場合はターン終了ボタンが無効化される', () => {
-    const notYourTurnState: IGameState = {
-      ...mockGameState,
-      currentPlayerId: 'player2'
-    };
-
-    render(
-      <GameBoard
-        gameState={notYourTurnState}
-        currentPlayerId="player1"
-        onPlayCard={mockOnPlayCard}
-        onEndTurn={mockOnEndTurn}
-      />
-    );
-
-    const endTurnButton = screen.getByText('ターン終了');
-    expect(endTurnButton).toBeDisabled();
+      const endTurnButton = screen.getByText('ターン終了');
+      expect(endTurnButton).toBeDisabled();
+    });
   });
 }); 

@@ -1,4 +1,4 @@
-import { ErrorTemplate, ErrorSeverity } from '../types/error';
+import { ErrorTemplate, ErrorSeverity } from '../types/error.js';
 
 interface ErrorStyles {
   backgroundColor: string;

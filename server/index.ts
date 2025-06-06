@@ -2,12 +2,12 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import cors from 'cors';
-import { GameState, Player, Card, WeatherKind, ElementKind, StatusEffectType } from '../shared/types/game';
+import { GameState, Player, Card, WeatherKind, ElementKind, StatusEffectType } from '../shared/types/game.js';
 import { v4 as uuidv4 } from 'uuid';
-import { generateRandomCard } from './data/cards';
+import { generateRandomCard } from './data/cards.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { GameManager } from './game/GameManager';
+import { GameManager } from './game/GameManager.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

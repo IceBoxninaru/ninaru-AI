@@ -1,5 +1,5 @@
 import React from 'react';
-import { useErrorHandler } from '../hooks/useErrorHandler';
+import { useErrorHandler } from '../hooks/useErrorHandler.js';
 import './RecoveryStatus.css';
 
 interface RecoveryStatusProps {

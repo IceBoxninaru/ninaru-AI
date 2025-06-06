@@ -1,6 +1,6 @@
 import React from 'react';
-import { IGameState, WeatherKind } from '../../../shared/types/game';
-import { convertToGameInfo, WEATHER_CONFIG } from '../../../shared/utils/gameUtils';
+import { IGameState, WeatherKind } from '../../../shared/types/game.js';
+import { convertToGameInfo, WEATHER_CONFIG } from '../../../shared/utils/gameUtils.js';
 import './GameInfo.css';
 
 interface GameInfoProps {

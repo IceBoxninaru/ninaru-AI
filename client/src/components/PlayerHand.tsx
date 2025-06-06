@@ -1,5 +1,5 @@
 import React from 'react';
-import { ICardData } from '../../../shared/types/game';
+import { ICardData } from '../../../shared/types/game.js';
 import './PlayerHand.css';
 
 interface PlayerHandProps {

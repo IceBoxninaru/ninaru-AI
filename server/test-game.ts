@@ -1,5 +1,5 @@
-import { GameService } from './src/services/TestGameService';
-import { ICardData } from '../shared/types/game';
+import { GameService } from './src/services/TestGameService.js';
+import { ICardData } from '../shared/types/game.js';
 import * as readline from 'readline';
 
 const game = new GameService();

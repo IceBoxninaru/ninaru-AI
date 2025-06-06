@@ -1,4 +1,4 @@
-import { GameState, Player, Card } from '../../shared/types/game';
+import { GameState, Player, Card } from '../../shared/types/game.js';
 
 interface TutorialStep {
   id: string;

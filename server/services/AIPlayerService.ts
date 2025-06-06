@@ -1,4 +1,4 @@
-import { Player, Card, GameState, CardType } from '../../shared/types/game';
+import { Player, Card, GameState, CardType } from '../../shared/types/game.js';
 
 interface AIStrategy {
   name: string;

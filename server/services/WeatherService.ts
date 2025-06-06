@@ -1,123 +1,97 @@
-import { WeatherType, Player, ElementType } from '../../shared/types/game';
+import { WeatherKind, Player, ElementKind, StatusEffectType } from '../../shared/types/game.js';
 
 interface WeatherEffect {
   name: string;
   description: string;
   onTurnStart?: (player: Player) => void;
   onTurnEnd?: (player: Player) => void;
-  elementBonus?: ElementType[];
-  elementPenalty?: ElementType[];
+  elementBonus?: ElementKind[];
+  elementPenalty?: ElementKind[];
 }
 
 export class WeatherService {
-  private readonly weatherEffects: Record<WeatherType, WeatherEffect> = {
-    curse: {
-      name: '呪いの雨',
-      description: 'ターン終了時にHPが減少し、呪い属性が強化される',
+  private readonly weatherEffects: Record<WeatherKind, WeatherEffect> = {
+    [WeatherKind.STORMY]: {
+      name: '嵐',
+      description: 'ターン終了時にHPが減少し、闇属性が強化される',
       onTurnEnd: (player) => {
         player.hp = Math.max(0, player.hp - 50);
       },
-      elementBonus: ['curse'],
-      elementPenalty: ['holy']
+      elementBonus: [ElementKind.DARK],
+      elementPenalty: [ElementKind.LIGHT]
     },
-    holy: {
+    [WeatherKind.SACRED]: {
       name: '神聖なる光',
-      description: 'ターン開始時にMPが回復し、神聖属性が強化される',
+      description: 'ターン開始時にMPが回復し、光属性が強化される',
       onTurnStart: (player) => {
         player.mp = Math.min(300, player.mp + 30);
       },
-      elementBonus: ['holy'],
-      elementPenalty: ['curse']
+      elementBonus: [ElementKind.LIGHT],
+      elementPenalty: [ElementKind.DARK]
     },
-    thunder: {
-      name: '雷雨',
-      description: '雷属性が強化され、氷属性が弱体化する',
-      elementBonus: ['thunder'],
-      elementPenalty: ['ice']
+    [WeatherKind.WINDY]: {
+      name: '強風',
+      description: '風属性が強化され、地属性が弱体化する',
+      elementBonus: [ElementKind.WIND],
+      elementPenalty: [ElementKind.EARTH]
     },
-    fire: {
-      name: '炎熱地獯',
-      description: '火属性が強化され、氷属性が弱体化する',
+    [WeatherKind.SNOWY]: {
+      name: '吹雪',
+      description: '水属性が強化され、火属性が弱体化する',
       onTurnEnd: (player) => {
-        if (player.status.has('burn')) {
+        if (player.status.has(StatusEffectType.BURN)) {
           player.hp = Math.max(0, player.hp - 30);
         }
       },
-      elementBonus: ['fire'],
-      elementPenalty: ['ice']
+      elementBonus: [ElementKind.WATER],
+      elementPenalty: [ElementKind.FIRE]
     },
-    ice: {
-      name: '氷雪',
-      description: '氷属性が強化され、火属性が弱体化する',
-      onTurnStart: (player) => {
-        player.mp = Math.max(0, player.mp - 10);
-      },
-      elementBonus: ['ice'],
-      elementPenalty: ['fire']
-    },
-    poison: {
-      name: '毒霧',
-      description: '毒属性が強化され、神聖属性が弱体化する',
+    [WeatherKind.FOGGY]: {
+      name: '霧',
+      description: '闇属性が強化され、光属性が弱体化する',
       onTurnEnd: (player) => {
-        if (player.status.has('poison')) {
+        if (player.status.has(StatusEffectType.POISON)) {
           player.hp = Math.max(0, player.hp - 70);
         }
       },
-      elementBonus: ['poison'],
-      elementPenalty: ['holy']
+      elementBonus: [ElementKind.DARK],
+      elementPenalty: [ElementKind.LIGHT]
     },
-    divine: {
-      name: '天罰',
-      description: '全ての属性が強化され、ランダムな効果が発生する',
-      onTurnStart: (player) => {
-        const effects = ['hp', 'mp', 'gold', 'faith'];
-        const effect = effects[Math.floor(Math.random() * effects.length)];
-        const amount = Math.floor(Math.random() * 100) - 50;
-
-        switch (effect) {
-          case 'hp':
-            player.hp = Math.max(0, Math.min(2000, player.hp + amount));
-            break;
-          case 'mp':
-            player.mp = Math.max(0, Math.min(300, player.mp + amount));
-            break;
-          case 'gold':
-            player.gold = Math.max(0, player.gold + amount);
-            break;
-          case 'faith':
-            player.faith = Math.max(0, player.faith + Math.floor(amount / 10));
-            break;
-        }
-      },
-      elementBonus: ['curse', 'holy', 'thunder', 'fire', 'ice', 'poison'],
-      elementPenalty: []
+    [WeatherKind.SUNNY]: {
+      name: '晴天',
+      description: '火属性が強化され、水属性が弱体化する',
+      elementBonus: [ElementKind.FIRE],
+      elementPenalty: [ElementKind.WATER]
     },
-    none: {
-      name: '通常',
+    [WeatherKind.RAINY]: {
+      name: '雨天',
+      description: '水属性が強化され、火属性が弱体化する',
+      elementBonus: [ElementKind.WATER],
+      elementPenalty: [ElementKind.FIRE]
+    },
+    [WeatherKind.CLOUDY]: {
+      name: '曇天',
       description: '特に効果なし',
       elementBonus: [],
       elementPenalty: []
     },
-    punishment: {
-      name: '天罰',
-      description: '全てのプレイヤーにダメージ',
-      onTurnEnd: (player) => {
-        player.hp = Math.max(0, player.hp - 100);
-      },
-      elementBonus: ['curse', 'holy', 'thunder', 'fire', 'ice', 'poison'],
+    [WeatherKind.CLEAR]: {
+      name: '快晴',
+      description: '特に効果なし',
+      elementBonus: [],
       elementPenalty: []
     }
   };
 
-  getWeatherEffect(weather: WeatherType): WeatherEffect {
+  getWeatherEffect(weather: WeatherKind): WeatherEffect {
     const effect = this.weatherEffects[weather];
     if (!effect) {
-      return this.weatherEffects.none;
+      return this.weatherEffects[WeatherKind.CLEAR];
     }
     return effect;
   }
 
-  applyWeatherEffects(weather: WeatherType, players: Player[], phase: 'start' | 'end'): void {
+  applyWeatherEffects(weather: WeatherKind, players: Player[], phase: 'start' | 'end'): void {
     const effect = this.getWeatherEffect(weather);
     
     players.forEach(player => {
@@ -131,7 +105,7 @@ export class WeatherService {
     });
   }
 
-  getElementModifier(weather: WeatherType, element: ElementType): number {
+  getElementModifier(weather: WeatherKind, element: ElementKind): number {
     const effect = this.getWeatherEffect(weather);
     
     if (effect.elementBonus?.includes(element)) return 1.2;
@@ -139,10 +113,20 @@ export class WeatherService {
     return 1;
   }
 
-  getNextWeather(currentWeather: WeatherType, turn: number): WeatherType {
-    if (turn >= 120) return 'punishment';
+  getNextWeather(currentWeather: WeatherKind, turn: number): WeatherKind {
+    if (turn >= 120) return WeatherKind.SACRED;
 
-    const weathers: WeatherType[] = ['curse', 'holy', 'thunder', 'fire', 'ice', 'poison', 'none'];
+    const weathers = [
+      WeatherKind.STORMY,
+      WeatherKind.SACRED,
+      WeatherKind.WINDY,
+      WeatherKind.SNOWY,
+      WeatherKind.FOGGY,
+      WeatherKind.SUNNY,
+      WeatherKind.RAINY,
+      WeatherKind.CLOUDY,
+      WeatherKind.CLEAR
+    ];
     const currentIndex = weathers.indexOf(currentWeather);
 
     if (Math.random() < 0.4) {

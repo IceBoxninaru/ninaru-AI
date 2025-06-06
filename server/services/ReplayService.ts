@@ -1,5 +1,5 @@
-import { IGameState, IPlayer, ICardData, Card } from '../../shared/types/game';
-import { cards } from '../data/cards';
+import { IGameState, IPlayer, ICardData, Card } from '../../shared/types/game.js';
+import { cards } from '../data/cards.js';
 
 interface GameAction {
   type: 'play' | 'draw' | 'discard' | 'attack' | 'defend' | 'effect';

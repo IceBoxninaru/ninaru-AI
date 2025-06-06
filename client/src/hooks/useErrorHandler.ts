@@ -1,8 +1,8 @@
 import { useState, useCallback } from 'react';
-import ErrorLogger from '../utils/errorLogger';
-import ErrorRecovery from '../utils/errorRecovery';
-import { ErrorMessageManager } from '../utils/errorMessageManager';
-import { ERROR_MESSAGES } from '../../../shared/constants/errorMessages';
+import ErrorLogger from '../utils/errorLogger.js';
+import ErrorRecovery from '../utils/errorRecovery.js';
+import { ErrorMessageManager } from '../utils/errorMessageManager.js';
+import { ERROR_MESSAGES } from '../../../shared/constants/errorMessages.js';
 
 interface ErrorState {
   errorKey: keyof typeof ERROR_MESSAGES;

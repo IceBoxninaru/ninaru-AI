@@ -1,4 +1,4 @@
-import { socket } from '../socket';
+import { socket } from '../socket.js';
 import { 
   IGameState, 
   IPlayer, 
@@ -6,8 +6,8 @@ import {
   GamePhase,
   WeatherKind,
   StatusEffectType
-} from '../../../shared/types/game';
-import { ErrorMessageManager } from '../utils/errorMessageManager';
+} from '../../../shared/types/game.js';
+import { ErrorMessageManager } from '../utils/errorMessageManager.js';
 
 export class GameService {
   private static instance: GameService;

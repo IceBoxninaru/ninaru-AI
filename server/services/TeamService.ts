@@ -1,4 +1,4 @@
-import { Player } from '../../shared/types/game';
+import { Player } from '../../shared/types/game.js';
 
 export class TeamService {
   private readonly MAX_TEAMS = 3;

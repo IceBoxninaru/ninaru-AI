@@ -1,5 +1,5 @@
 import React from 'react';
-import { IStatusEffect } from '../../../shared/types/game';
+import { IStatusEffect } from '../../../shared/types/game.js';
 import './StatusEffects.css';
 
 interface StatusEffectsProps {

@@ -1,4 +1,4 @@
-import { ErrorTemplate } from '../constants/errorMessages';
+import { ErrorTemplate } from '../constants/errorMessages.js';
 
 export const jaErrorMessages: Record<string, Omit<ErrorTemplate, 'code' | 'severity'>> = {
   // 接続関連のエラー

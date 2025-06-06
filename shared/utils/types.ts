@@ -1,4 +1,4 @@
-import { IPlayer, ICardData, ElementKind, StatusEffectType } from '../types/game';
+import { IPlayer, ICardData, ElementKind, StatusEffectType } from '../types/game.js';
 
 // ゲーム情報の表示用インターフェース
 export interface IGameInfo {

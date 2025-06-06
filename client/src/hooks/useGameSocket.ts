@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { GameState, Card, DamageEvent, ErrorResponse } from '../types/game';
+import { GameState, Card, DamageEvent, ErrorResponse } from '../types/game.js';
 
 interface UseGameSocketOptions {
   serverUrl: string;

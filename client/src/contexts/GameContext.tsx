@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useEffect } from 'react';
-import { socket } from '../socket';
-import { IGameState, ICardData, IPlayer } from '../../../shared/types/game';
-import { useErrorHandler } from '../hooks/useErrorHandler';
-import { ErrorCodeManager } from '../utils/errorCodeManager';
+import { socket } from '../socket.js';
+import { IGameState, ICardData, IPlayer } from '../../../shared/types/game.js';
+import { useErrorHandler } from '../hooks/useErrorHandler.js';
+import { ErrorCodeManager } from '../utils/errorCodeManager.js';
 
 interface GameContextType {
   gameState: IGameState | null;

@@ -11,7 +11,7 @@ import {
   PlayerSubCategory,
   SystemSubCategory,
   InfoSubCategory
-} from '../../../shared/types/error';
+} from '../../../shared/types/error.js';
 
 type SubCategoryType = 
   | NetworkSubCategory

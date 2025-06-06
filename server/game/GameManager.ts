@@ -9,9 +9,9 @@ import {
   StatusEffectType,
   ElementKind,
   IWeather
-} from '../../shared/types/game';
-import { WEATHER_CONFIG, STATUS_EFFECT_CONFIG } from '../schema/weather';
-import { generateRandomCard } from '../data/cards';
+} from '../../shared/types/game.js';
+import { WEATHER_CONFIG, STATUS_EFFECT_CONFIG } from '../schema/weather.js';
+import { generateRandomCard } from '../data/cards.js';
 
 export class GameManager {
   private games: Map<string, IGameState> = new Map();

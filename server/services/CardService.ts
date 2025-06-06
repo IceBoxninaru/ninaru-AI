@@ -1,11 +1,14 @@
-import { Card, Player, ElementType, CardType, StatusEffectType } from '../../shared/types/game';
-import { cards } from '../data/cards';
+import { Card, Player, ElementType, CardType, StatusEffectType, CardRarity } from '../../shared/types/game.js';
+import { cards } from '../data/cards.js';
 
 export class CardService {
   private readonly cards: Card[] = cards;
 
   getCardsByType(type: CardType): Card[] {
-    return this.cards.filter(card => card.type === type);
+    return this.cards.filter(card => 
+      card.type === type && 
+      card.rarity === 'COMMON' as CardRarity
+    );
   }
 
   getCardsByElement(element: ElementType): Card[] {
@@ -24,17 +27,17 @@ export class CardService {
     // プレイヤーの初期デッキを作成
     const deck: Card[] = [];
     
-    // 基本的な攻撃カード
-    const attackCards = this.getCardsByType('ATTACK' as CardType).slice(0, 10);
-    deck.push(...attackCards);
+    // 基本的な攻撃カード（10枚）
+    const attackCards = this.getCardsByType('ATTACK' as CardType);
+    deck.push(...attackCards.slice(0, 10));
 
-    // 基本的な防御カード
-    const defenseCards = this.getCardsByType('DEFENSE' as CardType).slice(0, 8);
-    deck.push(...defenseCards);
+    // 基本的な防御カード（8枚）
+    const defenseCards = this.getCardsByType('DEFENSE' as CardType);
+    deck.push(...defenseCards.slice(0, 8));
 
-    // 基本的な魔法カード
-    const magicCards = this.getCardsByType('MAGIC' as CardType).slice(0, 8);
-    deck.push(...magicCards);
+    // 基本的な魔法カード（8枚）
+    const magicCards = this.getCardsByType('MAGIC' as CardType);
+    deck.push(...magicCards.slice(0, 8));
 
     // カウンター防御カード (cdefense は存在しない型なのでコメントアウト)
     // const cdefenseCards = this.getCardsByType('cdefense' as CardType).slice(0, 4);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ErrorMessageManager } from '../utils/errorMessageManager';
+import { ErrorMessageManager } from '../utils/errorMessageManager.js';
 import './LanguageSelector.css';
 
 const LanguageSelector: React.FC = () => {

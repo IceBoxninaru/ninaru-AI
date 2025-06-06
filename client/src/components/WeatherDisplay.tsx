@@ -1,5 +1,5 @@
 import React from 'react';
-import { WeatherKind } from '../../../shared/types/game';
+import { WeatherKind } from '../../../shared/types/game.js';
 import './WeatherDisplay.css';
 
 interface WeatherDisplayProps {

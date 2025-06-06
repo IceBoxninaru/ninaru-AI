@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { IGameState, IPlayerData, ICardData } from '../../../shared/types/game';
+import { IGameState, IPlayerData, ICardData } from '../../../shared/types/game.js';
 
 const SOCKET_URL = 'http://localhost:3001';
 

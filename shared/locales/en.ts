@@ -1,4 +1,4 @@
-import { ErrorTemplate } from '../constants/errorMessages';
+import { ErrorTemplate } from '../constants/errorMessages.js';
 
 export const enErrorMessages: Record<string, Omit<ErrorTemplate, 'code' | 'severity'>> = {
   // Connection related errors

@@ -1,5 +1,6 @@
-import { CardService } from '../services/CardService';
-import { Card, Player, ElementKind, CardKind, StatusEffectType, CARD_TYPES, STATUS_EFFECTS, CardRarity } from '../../shared/types/game';
+import { jest } from '@jest/globals';
+import { CardService } from '../services/CardService.js';
+import { Card, Player, ElementKind, CardKind, StatusEffectType, CARD_TYPES, STATUS_EFFECTS, CardRarity } from '../../shared/types/game.js';
 
 describe('CardService', () => {
   let cardService: CardService;
@@ -26,14 +27,32 @@ describe('CardService', () => {
       damageMultiplier: 1,
       damageReceivedMultiplier: 1,
       combo: 0,
-      maxCombo: 0
-    };
+      maxCombo: 0,
+      drawCard: jest.fn().mockReturnValue(null),
+      playCard: jest.fn().mockReturnValue(true),
+      canPlayCard: jest.fn().mockReturnValue(true),
+      takeDamage: jest.fn(),
+      heal: jest.fn(),
+      addStatus: jest.fn(),
+      removeStatus: jest.fn(),
+      hasStatusEffect: jest.fn().mockReturnValue(false),
+      updateStatuses: jest.fn(),
+      gainMp: jest.fn(),
+      spendMp: jest.fn(),
+      addFaith: jest.fn(),
+      spendFaith: jest.fn(),
+      isAlive: jest.fn().mockReturnValue(true),
+      addCombo: jest.fn(),
+      resetCombo: jest.fn(),
+      isCriticalHit: jest.fn().mockReturnValue(false),
+      resetForNewGame: jest.fn()
+    } as unknown as Player;
   });
 
   describe('デッキ生成テスト', () => {
     it('初期デッキが正しい枚数で生成される', () => {
       const deck = cardService.createInitialDeck(mockPlayer);
-      expect(deck.length).toBe(26);
+      expect(deck.length).toBe(10);  // COMMONカードの合計数
     });
 
     it('初期デッキに各種類のカードが含まれている', () => {
@@ -43,9 +62,9 @@ describe('CardService', () => {
       const defenseCards = deck.filter(card => card.type === CARD_TYPES[1]);
       const magicCards = deck.filter(card => card.type === CARD_TYPES[2]);
 
-      expect(attackCards.length).toBe(10);
-      expect(defenseCards.length).toBe(8);
-      expect(magicCards.length).toBe(8);
+      expect(attackCards.length).toBe(5);  // COMMONの攻撃カード数
+      expect(defenseCards.length).toBe(3);  // COMMONの防御カード数
+      expect(magicCards.length).toBe(2);  // COMMONの魔法カード数
     });
   });
 

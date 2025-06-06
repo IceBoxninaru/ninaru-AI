@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { CardType, ElementType, StatusEffect, CardRarity } from '../../shared/types/game';
+import { CardType, ElementType, StatusEffect, CardRarity } from '../../shared/types/game.js';
 
 export const cardSchema = z.object({
   id: z.string(),
@@ -19,26 +19,29 @@ export type Card = z.infer<typeof cardSchema>;
 export const sampleCards: Card[] = [
   {
     id: 'ATK_CURSE_01',
-    type: 'attack',
+    type: 'ATTACK',
     name: '呪いの刃',
     power: 150,
-    element: 'curse',
-    isPlus: false
+    element: 'DARK',
+    rarity: 'RARE',
+    description: '闇属性の力で敵を切り裂く'
   },
   {
     id: 'MAG_FIRE_01',
-    type: 'magic',
+    type: 'MAGIC',
     name: '火炎の嵐',
     power: 200,
     mpCost: 80,
-    element: 'fire',
-    aoe: true
+    element: 'FIRE',
+    rarity: 'RARE',
+    description: '広範囲に炎のダメージを与える'
   },
   {
-    id: 'FLD_NULL_01',
-    type: 'field',
+    id: 'SUP_NULL_01',
+    type: 'SUPPORT',
     name: '天候無効化',
-    nullifyWeather: true,
-    duration: 0
+    rarity: 'UNCOMMON',
+    description: '天候の効果を一時的に無効化する',
+    effects: ['SHIELD']
   }
 ];

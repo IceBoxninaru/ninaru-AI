@@ -1,4 +1,4 @@
-import { Card, ElementType } from '../../shared/types/game';
+import { Card, ElementType } from '../../shared/types/game.js';
 
 interface DeckTemplate {
   id: string;

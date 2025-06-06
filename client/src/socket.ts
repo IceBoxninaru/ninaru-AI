@@ -4,7 +4,7 @@ interface ImportMetaEnv {
   VITE_SOCKET_URL: string;
 }
 
-const SOCKET_URL = (import.meta.env as ImportMetaEnv).VITE_SOCKET_URL || 'http://localhost:3000';
+const SOCKET_URL = (import.meta.env as ImportMetaEnv).VITE_SOCKET_URL || 'http://localhost:3001';
 
 export const socket = io(SOCKET_URL, {
   autoConnect: true,

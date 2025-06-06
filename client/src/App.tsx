@@ -181,13 +181,14 @@ const GameContent = (): React.ReactElement => {
       </div>
       
       <div className="game-board">
-        <GameBoard
-          players={gameState.players}
-          currentPlayerId={gameState.currentPlayerId}
-          onPlayerSelect={(targetId: string) => {
-            // プレイヤー選択の処理
-          }}
-        />
+      // 修正後（正しい状態）
+<GameBoard
+  gameState={gameState}
+  currentPlayerId={gameState.currentPlayerId}
+  onPlayCard={playCard}
+  onEndTurn={endTurn}
+/>
+    
       </div>
 
       <div className="status-effects">
