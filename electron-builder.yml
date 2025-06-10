@@ -1,0 +1,45 @@
+appId: com.yourdomain.claudekingdom
+productName: claude王国
+copyright: Copyright © 2023 Your Name
+
+# Windows設定
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  icon: icon.png
+
+# macOS設定
+mac:
+  target:
+    - target: dmg
+      arch:
+        - x64
+        - arm64
+  icon: icon.icns
+  category: public.app-category.games
+
+# Linux設定
+linux:
+  target:
+    - target: AppImage
+    - target: deb
+  icon: icon.png
+  category: Game
+
+# ファイル設定
+files:
+  - "**/*"
+  - "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}"
+  - "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}"
+  - "!**/node_modules/*.d.ts"
+  - "!**/node_modules/.bin"
+  - "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}"
+  - "!.editorconfig"
+  - "!**/._*"
+  - "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,__pycache__,thumbs.db,.gitignore,.gitattributes}"
+  - "!**/{__pycache__,*.py[cod],*$py.class}"
+  - "!**/{.env,.env.*,.venv,venv,ENV,env,env.bak,venv.bak}"
+
+# Steamで配布する際はSteamworksSDKとの連携が必要な場合があります 

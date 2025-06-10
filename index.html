@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>claude王国</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <!-- スタート画面 -->
+    <div id="start-screen" class="start-screen">
+        <h1>claude王国</h1>
+        <div class="start-container">
+            <form id="start-form" onsubmit="return false;">
+                <div class="input-group">
+                    <label for="player-name">あなたの名前</label>
+                    <input type="text" id="player-name" placeholder="名前を入力してください" maxlength="20">
+                </div>
+                
+                <div class="mode-selection">
+                    <h3>ゲームモード選択</h3>
+                    <div class="mode-options">
+                        <div class="mode-option-card" data-mode="normal">
+                            <div class="mode-title">通常モード</div>
+                            <div class="mode-description">オーソドックスな戦略重視の対戦</div>
+                        </div>
+                        <div class="mode-option-card selected" data-mode="speed">
+                            <div class="mode-title">スピードモード</div>
+                            <div class="mode-description">瘴気の回復が早く、手札も多く引ける高速バトル</div>
+                        </div>
+                        <div class="mode-option-card" data-mode="combo">
+                            <div class="mode-title">コンボモード</div>
+                            <div class="mode-description">連続でカードを使うほど効果がアップする</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="game-type-selection">
+                    <h3>対戦タイプ選択</h3>
+                    <div class="game-type-options">
+                        <div class="game-type-option selected" data-type="solo">
+                            <div class="type-title">ソロモード</div>
+                            <div class="type-description">AIとの対戦</div>
+                        </div>
+                        <div class="game-type-option" data-type="online">
+                            <div class="type-title">オンラインマルチ</div>
+                            <div class="type-description">他のプレイヤーとの対戦</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="room-code-container" class="room-code-container hidden">
+                    <label for="room-code">部屋の合言葉</label>
+                    <input type="text" id="room-code" placeholder="合言葉を入力" maxlength="20">
+                </div>
+                
+                <button id="start-game-button" class="start-button" type="button">ゲーム開始</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- メインゲーム画面 -->
+    <div id="game-container" class="hidden">
+        <div id="game-mode-indicator">
+            <span id="current-mode-display">スピードモード</span>
+            <div id="mode-tooltip">
+                <div id="normal-mode" class="mode-option">通常モード: オーソドックスな戦略重視の対戦</div>
+                <div id="speed-mode" class="mode-option active">スピードモード: 瘴気の回復が早く、手札も多く引ける高速バトル</div>
+                <div id="combo-mode" class="mode-option">コンボモード: 連続でカードを使うほど効果がアップする</div>
+            </div>
+        </div>
+
+        <div class="game-layout">
+            <!-- 左側：ゲームログエリア -->
+            <div class="left-column">
+                <div id="game-log-area">
+                    <h3>ゲーム履歴</h3>
+                    <div id="log-messages">
+                        <p>claude王国へようこそ…</p>
+                    </div>
+                </div>
+                
+                <!-- マルチプレイ時のプレイヤーリスト（初期状態では非表示） -->
+                <div id="players-list" class="hidden">
+                    <h3>参加プレイヤー</h3>
+                    <ul id="player-list-items">
+                        <!-- プレイヤーリストはJSで動的に生成 -->
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 右側：ゲームプレイエリア -->
+            <div class="right-column">
+                <div id="enemy-area" class="enemy-area">
+                    <div class="enemy-info">
+                        <h3 id="enemy-name" class="enemy-name">敵</h3>
+                        <div class="status-bar-container">
+                            <div class="status-bar-wrapper">
+                                <span class="status-label">正気度(HP):</span>
+                                <div class="status-bar hp-bar">
+                                    <div id="enemy-hp-bar" class="status-bar-inner" style="width: 100%;"></div>
+                                </div>
+                                <span id="enemy-hp-value" class="status-value">35 / 35</span>
+                            </div>
+                            <div class="status-bar-wrapper">
+                                <span class="status-label">瘴気(MP):</span>
+                                <div class="status-bar mp-bar">
+                                    <div id="enemy-mp-bar" class="status-bar-inner" style="width: 100%;"></div>
+                                </div>
+                                <span id="enemy-mp-value" class="status-value">5 / 5</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="enemy-hand" class="hand-area">
+                        <!-- ここに敵のカードが動的に追加される -->
+                    </div>
+                </div>
+                
+                <div id="player-area" class="player-area">
+                    <div class="player-info">
+                        <h3 id="player-name-display" class="player-name">プレイヤー</h3>
+                        <div class="status-bar-container">
+                            <div class="status-bar-wrapper">
+                                <span class="status-label">正気度(HP):</span>
+                                <div class="status-bar hp-bar">
+                                    <div id="player-hp-bar" class="status-bar-inner" style="width: 100%;"></div>
+                                </div>
+                                <span id="player-hp-value" class="status-value">35 / 35</span>
+                            </div>
+                            <div class="status-bar-wrapper">
+                                <span class="status-label">瘴気(MP):</span>
+                                <div class="status-bar mp-bar">
+                                    <div id="player-mp-bar" class="status-bar-inner" style="width: 100%;"></div>
+                                </div>
+                                <span id="player-mp-value" class="status-value">5 / 5</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="player-hand" class="hand-area">
+                        <div class="hand-info">手札: <span id="hand-count">0</span>/<span id="max-hand">12</span></div>
+                        <!-- ここにカードが動的に追加される -->
+                    </div>
+                    
+                    <div class="game-controls">
+                        <button id="end-turn-button" class="game-button">ターン終了</button>
+                        <button id="play-card-button" class="game-button" style="display: none;">カードを使用</button>
+                        <button id="help-button" class="game-button">操作ヘルプ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- コンボ表示 -->
+        <div id="combo-display" style="display: none;">コンボ: 0</div>
+        
+        <div id="keyboard-shortcuts-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2>操作方法</h2>
+                <ul>
+                    <li><strong>カード選択:</strong> カードをクリックで選択</li>
+                    <li><strong>カード使用:</strong> カードを選択後、「カードを使用」ボタンをクリック</li>
+                    <li><strong>ターン終了:</strong> カード使用後、自動的にターン終了します</li>
+                </ul>
+                <p><strong>カード情報:</strong></p>
+                <ul>
+                    <li><span style="color: #4fc3f7;">青色の数字(左上)</span> - カードコスト（必要瘴気）</li>
+                    <li><span style="color: #ff9800;">オレンジ色の数字(右上)</span> - コンボ値（コンボモード時に効果アップ）</li>
+                </ul>
+                <button id="close-help-button" class="game-button">閉じる</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
