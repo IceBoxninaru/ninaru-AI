@@ -232,8 +232,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // モード選択の処理
     modeOptionCards.forEach(card => {
         card.addEventListener('click', () => {
-            // 全てのカードから選択クラスを削除
-            modeOptionCards.forEach(c => c.classList.remove('selected'));
+            // 全てのカードから選択クラスを削除 (動的に取得)
+            document.querySelectorAll('.mode-option-card.selected')
+                .forEach(c => c.classList.remove('selected'));
             // クリックされたカードに選択クラスを追加
             card.classList.add('selected');
             // ゲームモードを設定
@@ -1871,8 +1872,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // モード選択の処理
     modeOptionCards.forEach(card => {
         card.addEventListener('click', () => {
-            // 全てのカードから選択クラスを削除
-            modeOptionCards.forEach(c => c.classList.remove('selected'));
+            // 全てのカードから選択クラスを削除 (動的に取得)
+            document.querySelectorAll('.mode-option-card.selected')
+                .forEach(c => c.classList.remove('selected'));
             // クリックされたカードに選択クラスを追加
             card.classList.add('selected');
             // ゲームモードを設定
@@ -8556,8 +8558,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // モード選択の処理
     modeOptionCards.forEach(card => {
         card.addEventListener('click', () => {
-            // 全てのカードから選択クラスを削除
-            modeOptionCards.forEach(c => c.classList.remove('selected'));
+            // 全てのカードから選択クラスを削除 (動的に取得)
+            document.querySelectorAll('.mode-option-card.selected')
+                .forEach(c => c.classList.remove('selected'));
             // クリックされたカードに選択クラスを追加
             card.classList.add('selected');
             // ゲームモードを設定
