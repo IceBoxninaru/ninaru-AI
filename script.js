@@ -114,7 +114,7 @@ const gameState = {
     enemyDiscard: [],
     selectedCardId: null,
     effects: [],
-    mode: 'normal',
+    mode: 'speed',
     playerCombo: 0,
     enemyCombo: 0,
     costReduction: 0,
@@ -232,8 +232,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // モード選択の処理
     modeOptionCards.forEach(card => {
         card.addEventListener('click', () => {
-            // 全てのカードから選択クラスを削除
-            modeOptionCards.forEach(c => c.classList.remove('selected'));
+            // 全てのモードカードから選択クラスを削除
+            document.querySelectorAll('.mode-option-card')
+                .forEach(c => c.classList.remove('selected'));
             // クリックされたカードに選択クラスを追加
             card.classList.add('selected');
             // ゲームモードを設定
@@ -1753,7 +1754,7 @@ const gameState = {
     enemyDiscard: [],
     selectedCardId: null,
     effects: [],
-    mode: 'normal',
+    mode: 'speed',
     playerCombo: 0,
     enemyCombo: 0,
     costReduction: 0,
@@ -1871,8 +1872,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // モード選択の処理
     modeOptionCards.forEach(card => {
         card.addEventListener('click', () => {
-            // 全てのカードから選択クラスを削除
-            modeOptionCards.forEach(c => c.classList.remove('selected'));
+            // 全てのモードカードから選択クラスを削除
+            document.querySelectorAll('.mode-option-card')
+                .forEach(c => c.classList.remove('selected'));
             // クリックされたカードに選択クラスを追加
             card.classList.add('selected');
             // ゲームモードを設定
@@ -8438,7 +8440,7 @@ const gameState = {
     enemyDiscard: [],
     selectedCardId: null,
     effects: [],
-    mode: 'normal',
+    mode: 'speed',
     playerCombo: 0,
     enemyCombo: 0,
     costReduction: 0,
@@ -8556,8 +8558,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // モード選択の処理
     modeOptionCards.forEach(card => {
         card.addEventListener('click', () => {
-            // 全てのカードから選択クラスを削除
-            modeOptionCards.forEach(c => c.classList.remove('selected'));
+            // 全てのモードカードから選択クラスを削除
+            document.querySelectorAll('.mode-option-card')
+                .forEach(c => c.classList.remove('selected'));
             // クリックされたカードに選択クラスを追加
             card.classList.add('selected');
             // ゲームモードを設定
